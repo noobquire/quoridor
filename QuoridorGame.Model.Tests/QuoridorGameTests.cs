@@ -1,4 +1,6 @@
 ﻿using NUnit.Framework;
+using QuoridorGame.Model.Entities;
+using Game = QuoridorGame.Model.Entities.QuoridorGame;
 
 namespace QuoridorGame.Model.Tests
 {
@@ -6,12 +8,12 @@ namespace QuoridorGame.Model.Tests
     [TestFixture]
     public class QuoridorGameTests
     {
-        private QuoridorGame game;
+        private Game game;
 
         [SetUp]
         public void Setup()
         {
-            game = new QuoridorGame();
+            game = new Game();
         }
 
         [Test]

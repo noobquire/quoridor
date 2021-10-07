@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace QuoridorGame.Model
+﻿namespace QuoridorGame.Model.Entities
 {
     public class QuoridorGame
     {

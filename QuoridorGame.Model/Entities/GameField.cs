@@ -1,6 +1,6 @@
 ﻿using QuoridorGame.Model.Interfaces;
 
-namespace QuoridorGame.Model
+namespace QuoridorGame.Model.Entities
 {
     /// <summary>
     /// Quoridor game field represented as a graph of cells.
@@ -17,7 +17,7 @@ namespace QuoridorGame.Model
             {
                 for (int j = 0; j < FieldSize; j++)
                 {
-                    Nodes[i, j] = new Cell();
+                    Nodes[i, j] = new Cell(i, j);
                 }
             }
 

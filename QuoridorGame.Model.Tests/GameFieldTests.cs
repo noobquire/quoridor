@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using QuoridorGame.Model.Entities;
 using System.Linq;
 
 namespace QuoridorGame.Model.Tests
