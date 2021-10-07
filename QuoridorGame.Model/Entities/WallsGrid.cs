@@ -40,7 +40,7 @@ namespace QuoridorGame.Model.Entities
 
                 if (up_neigh || low_neigh)
                 {
-                    return (false, "Position is blocked by another vertical wall.")
+                    return (false, "Position is blocked by another vertical wall.");
                 }
             }
             else
