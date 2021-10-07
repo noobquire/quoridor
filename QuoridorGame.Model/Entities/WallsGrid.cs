@@ -9,7 +9,7 @@ namespace QuoridorGame.Model.Entities
     public class WallsGrid
     {
         public const int GridSize = 8;
-        private int[][] Grid;
+        public int[][] Grid;
 
         public WallsGrid()
         {
@@ -26,12 +26,14 @@ namespace QuoridorGame.Model.Entities
             {
                 return (false, "WallsGrid index is out of bounds.");
             }
-
+            if (Grid[x][y] != 0) 
+            {
+                return (false, "Position already taken by other wall.");
+            }
             if (walltype == WallType.None)
             {
                 return (false, "WallType can not be WallType:None.");
             }
-
             else if (walltype == WallType.Vertical)
             {
                 // Check if no other vertival walls in adjacent positions
@@ -51,7 +53,7 @@ namespace QuoridorGame.Model.Entities
 
                 if (left_neigh || right_neigh)
                 {
-                    return (false, "Position is blocked by another vertical wall.");
+                    return (false, "Position is blocked by another horizontal wall.");
                 }
 
             }
