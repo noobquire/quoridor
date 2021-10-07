@@ -3,11 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31717.71
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuoridorGame", "QuoridorGame\QuoridorGame.csproj", "{BBB5C950-6306-4E12-A2A2-65A3AB70C44A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuoridorGame", "QuoridorGame\QuoridorGame.csproj", "{BBB5C950-6306-4E12-A2A2-65A3AB70C44A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuoridorGame.Model", "QuoridorGame.Model\QuoridorGame.Model.csproj", "{7CD216A5-79DA-470B-ACBA-1E096F9AD46A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuoridorGame.Model", "QuoridorGame.Model\QuoridorGame.Model.csproj", "{7CD216A5-79DA-470B-ACBA-1E096F9AD46A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuoridorGame.Model.Tests", "QuoridorGame.Model.Tests\QuoridorGame.Model.Tests.csproj", "{BA768BD4-F33F-41E7-8043-707A6ADDC2F6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuoridorGame.Model.Tests", "QuoridorGame.Model.Tests\QuoridorGame.Model.Tests.csproj", "{BA768BD4-F33F-41E7-8043-707A6ADDC2F6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{F6C804BB-9F27-4339-9440-B07EEA71D6FA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{71990A5B-2942-4B32-82DD-364C746A4182}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,6 +34,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BBB5C950-6306-4E12-A2A2-65A3AB70C44A} = {F6C804BB-9F27-4339-9440-B07EEA71D6FA}
+		{7CD216A5-79DA-470B-ACBA-1E096F9AD46A} = {F6C804BB-9F27-4339-9440-B07EEA71D6FA}
+		{BA768BD4-F33F-41E7-8043-707A6ADDC2F6} = {71990A5B-2942-4B32-82DD-364C746A4182}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CBB944DC-B9DC-4D9A-9C58-AE669E3EBE71}
