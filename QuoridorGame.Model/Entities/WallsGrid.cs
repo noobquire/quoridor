@@ -51,7 +51,7 @@ namespace QuoridorGame.Model.Entities
 
                 if (left_neigh || right_neigh)
                 {
-                    return (false, "Position is blocked by another vertical wall.")
+                    return (false, "Position is blocked by another vertical wall.");
                 }
 
             }
@@ -59,7 +59,7 @@ namespace QuoridorGame.Model.Entities
             //TODO: check if player is not trapped 
 
             // Wall may be placed if no exeptions occurred
-            return (true, "")
+            return (true, "");
         }
     }
 }
