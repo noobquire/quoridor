@@ -11,8 +11,8 @@ namespace QuoridorGame.Model
         public QuoridorGame()
         {
             GameField = new GameField();
-            FirstPlayer = new Player(GameField.Cells[0, 4]);
-            SecondPlayer = new Player(GameField.Cells[8, 4]);
+            FirstPlayer = new Player(GameField.Nodes[0, 4]);
+            SecondPlayer = new Player(GameField.Nodes[8, 4]);
         }
     }
 }

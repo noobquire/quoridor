@@ -1,9 +1,13 @@
 ﻿using System.Collections.Generic;
+using QuoridorGame.Model.Interfaces;
 
 namespace QuoridorGame.Model
 {
-    public class Cell
+    /// <summary>
+    /// Game field node on which the player can move.
+    /// </summary>
+    public class Cell : IGraphNode<Cell>
     {
-        public IEnumerable<Cell> AdjacentCells { get; set; }
+        public IEnumerable<Cell> AdjacentNodes { get; set; }
     }
 }

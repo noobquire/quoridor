@@ -1,4 +1,6 @@
-﻿namespace QuoridorGame.Model
+﻿using System.Linq;
+
+namespace QuoridorGame.Model
 {
     public class Player
     {

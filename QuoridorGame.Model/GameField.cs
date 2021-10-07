@@ -1,18 +1,23 @@
-﻿namespace QuoridorGame.Model
+﻿using QuoridorGame.Model.Interfaces;
+
+namespace QuoridorGame.Model
 {
-    public class GameField
+    /// <summary>
+    /// Quoridor game field represented as a graph of cells.
+    /// </summary>
+    public class GameField : IGraph<Cell>
     {
         private const int FieldSize = 9;
-        public Cell[,] Cells { get; set; }
+        public Cell[,] Nodes { get; set; }
 
         public GameField()
         {
-            Cells = new Cell[FieldSize, FieldSize];
+            Nodes = new Cell[FieldSize, FieldSize];
             for (int i = 0; i < FieldSize; i++)
             {
                 for (int j = 0; j < FieldSize; j++)
                 {
-                    Cells[i, j] = new Cell();
+                    Nodes[i, j] = new Cell();
                 }
             }
 
@@ -29,35 +34,35 @@
             for (int i = 1; i < FieldSize - 1; i++)
             {
                 // top row
-                Cells[0, i].AdjacentCells = new[]
+                Nodes[0, i].AdjacentNodes = new[]
                 {
-                    Cells[0, i - 1],
-                    Cells[0, i + 1],
-                    Cells[1, i]
+                    Nodes[0, i - 1],
+                    Nodes[0, i + 1],
+                    Nodes[1, i]
                 };
 
                 // bottom row
-                Cells[FieldSize - 1, i].AdjacentCells = new[]
+                Nodes[FieldSize - 1, i].AdjacentNodes = new[]
                 {
-                    Cells[FieldSize - 1, i - 1],
-                    Cells[FieldSize - 1, i + 1],
-                    Cells[FieldSize - 2, i]
+                    Nodes[FieldSize - 1, i - 1],
+                    Nodes[FieldSize - 1, i + 1],
+                    Nodes[FieldSize - 2, i]
                 };
 
                 // first column
-                Cells[i, 0].AdjacentCells = new[]
+                Nodes[i, 0].AdjacentNodes = new[]
                 {
-                    Cells[i - 1, 0],
-                    Cells[i + 1, 0],
-                    Cells[i, 1]
+                    Nodes[i - 1, 0],
+                    Nodes[i + 1, 0],
+                    Nodes[i, 1]
                 };
 
                 // last column
-                Cells[i, FieldSize - 1].AdjacentCells = new[]
+                Nodes[i, FieldSize - 1].AdjacentNodes = new[]
                 {
-                    Cells[i - 1, FieldSize - 1],
-                    Cells[i + 1, FieldSize - 1],
-                    Cells[i, FieldSize - 2]
+                    Nodes[i - 1, FieldSize - 1],
+                    Nodes[i + 1, FieldSize - 1],
+                    Nodes[i, FieldSize - 2]
                 };
             }
         }
@@ -71,12 +76,12 @@
             {
                 for (int j = 1; j < FieldSize - 1; j++)
                 {
-                    Cells[i, j].AdjacentCells = new[]
+                    Nodes[i, j].AdjacentNodes = new[]
                     {
-                        Cells[i, j - 1],
-                        Cells[i, j + 1],
-                        Cells[i - 1, j],
-                        Cells[i + 1, j]
+                        Nodes[i, j - 1],
+                        Nodes[i, j + 1],
+                        Nodes[i - 1, j],
+                        Nodes[i + 1, j]
                     };
                 }
             }
@@ -87,25 +92,28 @@
         /// </summary>
         private void InitCornerCells()
         {
-            Cells[0, 0].AdjacentCells = new[] // top left
+            Nodes[0, 0].AdjacentNodes = new[] // top left
             {
-                Cells[0, 1],
-                Cells[1, 0]
+                Nodes[0, 1],
+                Nodes[1, 0]
             };
-            Cells[0, FieldSize - 1].AdjacentCells = new[] // top right
+
+            Nodes[0, FieldSize - 1].AdjacentNodes = new[] // top right
             {
-                Cells[0, FieldSize - 2],
-                Cells[1, FieldSize - 1]
+                Nodes[0, FieldSize - 2],
+                Nodes[1, FieldSize - 1]
             };
-            Cells[FieldSize - 1, 0].AdjacentCells = new[] // bottom left
+
+            Nodes[FieldSize - 1, 0].AdjacentNodes = new[] // bottom left
             {
-                Cells[FieldSize - 2, 0],
-                Cells[FieldSize - 1, 1]
+                Nodes[FieldSize - 2, 0],
+                Nodes[FieldSize - 1, 1]
             };
-            Cells[FieldSize - 1, FieldSize - 1].AdjacentCells = new[] // bottom right
+
+            Nodes[FieldSize - 1, FieldSize - 1].AdjacentNodes = new[] // bottom right
             {
-                Cells[FieldSize - 2, FieldSize - 1],
-                Cells[FieldSize - 1, FieldSize - 2]
+                Nodes[FieldSize - 2, FieldSize - 1],
+                Nodes[FieldSize - 1, FieldSize - 2]
             };
         }
     }
