@@ -3,6 +3,7 @@ using System.Linq;
 using QuoridorGame.Model.Entities;
 using QuoridorGame.Model.Exceptions;
 using QuoridorGame.Model.Logic;
+using Game = QuoridorGame.Model.Entities.QuoridorGame;
 
 
 namespace QuoridorGame.Model.Tests
@@ -15,10 +16,9 @@ namespace QuoridorGame.Model.Tests
         [SetUp]
         public void Setup()
         {
-            grid = new WallsGrid();
-            CellField graph = new CellField();
-            GameField gamefield = new GameField(graph, grid);
-            wallPlacer = new WallPlacer(gamefield, new PathFinder<CellField, Cell>(graph));
+            Game game = new Game();
+            wallPlacer = new WallPlacer(game, new PathFinder<CellField, Cell>(game.GameField.Cells));
+            grid = game.GameField.Walls;
         }
 
         
