@@ -30,11 +30,12 @@ namespace QuoridorGame.Model.Entities
             {
                 return (false, "Position already taken by other wall.");
             }
+
             if (walltype == WallType.None)
             {
                 return (false, "WallType can not be WallType:None.");
             }
-            else if (walltype == WallType.Vertical)
+            if (walltype == WallType.Vertical)
             {
                 // Check if no other vertival walls in adjacent positions
                 var up_neigh = x == 0 ? false : (Grid[x - 1][y] == 1);
@@ -49,7 +50,7 @@ namespace QuoridorGame.Model.Entities
             {
                 // Check if no other horizontal walls in adjacent positions
                 var left_neigh = y == 0 ? false : (Grid[x][y - 1] == 2);
-                var right_neigh = y == GridSize -1 ? false : (Grid[x][y+1] == 2);
+                var right_neigh = y == GridSize - 1 ? false : (Grid[x][y+1] == 2);
 
                 if (left_neigh || right_neigh)
                 {
