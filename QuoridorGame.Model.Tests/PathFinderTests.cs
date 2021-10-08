@@ -1,11 +1,6 @@
 ﻿using NUnit.Framework;
 using QuoridorGame.Model.Entities;
-using QuoridorGame.Model.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace QuoridorGame.Model.Tests
 {
@@ -39,9 +34,9 @@ namespace QuoridorGame.Model.Tests
         {
             for (int i = 0; i < 9; i++)
             {
-                var bottomNegbour = graph.Nodes[5, i];
+                var bottomNeigbour = graph.Nodes[5, i];
                 var newNegibours = graph.Nodes[4, i].AdjacentNodes.ToList();
-                newNegibours.Remove(bottomNegbour);
+                newNegibours.Remove(bottomNeigbour);
                 graph.Nodes[4, i].AdjacentNodes = newNegibours;
             }
         }

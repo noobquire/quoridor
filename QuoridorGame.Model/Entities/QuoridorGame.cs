@@ -8,9 +8,11 @@
 
         public QuoridorGame()
         {
-            GameField = new GameField();
-            FirstPlayer = new Player(GameField.Nodes[0, 4]);
-            SecondPlayer = new Player(GameField.Nodes[8, 4]);
+            var cellField = new CellField();
+            var wallsGrid = new WallsGrid();
+            GameField = new GameField(cellField, wallsGrid);
+            FirstPlayer = new Player(GameField.Cells[0, 4]);
+            SecondPlayer = new Player(GameField.Cells[8, 4]);
         }
     }
 }
