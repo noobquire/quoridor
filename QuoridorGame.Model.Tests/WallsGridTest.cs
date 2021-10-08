@@ -59,18 +59,17 @@ namespace QuoridorGame.Model.Tests
             Assert.AreEqual(msg, "Position is blocked by another vertical wall.");
         }
 
-        //fails
-        // [TestCase(1, 0)]
-        // [TestCase(7, 0)]
-        // [TestCase(7, 7)]
-        // [TestCase(3, 3)]
-        // public void WallIsNotPlaceable_LowerVerticalBlock(int x, int y)
-        // {
-        //     grid.Grid[x + 1][y] = 1;
-        //     (bool status, string msg) = grid.WallIsPlaceable(WallType.Vertical, x, y);
-        //     Assert.IsFalse(status);
-        //     Assert.AreEqual(msg, "Position is blocked by another vertical wall.");
-        // }
+        [TestCase(1, 0)]
+        [TestCase(6, 0)]
+        [TestCase(6, 7)]
+        [TestCase(3, 3)]
+        public void WallIsNotPlaceable_LowerVerticalBlock(int x, int y)
+        {
+            grid.Grid[x + 1][y] = 1;
+            (bool status, string msg) = grid.WallIsPlaceable(WallType.Vertical, x, y);
+            Assert.IsFalse(status);
+            Assert.AreEqual(msg, "Position is blocked by another vertical wall.");
+        }
 
         [TestCase(0, 1)]
         [TestCase(7, 7)]
