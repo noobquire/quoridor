@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using QuoridorGame.Model.Entities;
+using QuoridorGame.Model.Logic;
 using System.Linq;
 
 namespace QuoridorGame.Model.Tests
@@ -7,14 +8,14 @@ namespace QuoridorGame.Model.Tests
     [TestFixture]
     public class PathFinderTests
     {
-        private GameField graph;
-        private PathFinder<GameField, Cell> pathFinder;
+        private CellField graph;
+        private PathFinder<CellField, Cell> pathFinder;
 
         [SetUp]
         public void Setup()
         {
-            graph = new GameField();
-            pathFinder = new PathFinder<GameField, Cell>(graph);
+            graph = new CellField();
+            pathFinder = new PathFinder<CellField, Cell>(graph);
         }
 
         [TestCase(0, 4, 8, 4)]

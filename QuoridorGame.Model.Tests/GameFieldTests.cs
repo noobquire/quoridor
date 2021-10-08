@@ -4,14 +4,14 @@ using System.Linq;
 
 namespace QuoridorGame.Model.Tests
 {
-    public class GameFieldTests
+    public class CellFieldTests
     {
-        private GameField field;
+        private CellField cellField;
 
         [SetUp]
         public void Setup()
         {
-            field = new GameField();
+            cellField = new CellField();
         }
 
         [TestCase(0, 0)]
@@ -20,7 +20,7 @@ namespace QuoridorGame.Model.Tests
         [TestCase(8, 8)]
         public void GameField_CornerCells_ShouldHaveTwoAdjacentCells(int i, int j)
         {
-            Assert.AreEqual(2, field.Nodes[i, j].AdjacentNodes.Count());
+            Assert.AreEqual(2, cellField.Nodes[i, j].AdjacentNodes.Count());
         }
 
         [TestCase(1, 0)]
@@ -28,7 +28,7 @@ namespace QuoridorGame.Model.Tests
         [TestCase(8, 3)]
         public void GameField_BorderCells_ShouldHaveThreeAdjacentCells(int i, int j)
         {
-            Assert.AreEqual(3, field.Nodes[i, j].AdjacentNodes.Count());
+            Assert.AreEqual(3, cellField.Nodes[i, j].AdjacentNodes.Count());
         }
 
         [TestCase(1, 1)]
@@ -37,7 +37,7 @@ namespace QuoridorGame.Model.Tests
         [TestCase(5, 6)]
         public void GameField_BorderCells_ShouldHaveFourAdjacentCells(int i, int j)
         {
-            Assert.AreEqual(4, field.Nodes[i, j].AdjacentNodes.Count());
+            Assert.AreEqual(4, cellField.Nodes[i, j].AdjacentNodes.Count());
         }
     }
 }
