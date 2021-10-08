@@ -12,5 +12,15 @@
             FirstPlayer = new Player(GameField.Nodes[0, 4]);
             SecondPlayer = new Player(GameField.Nodes[8, 4]);
         }
+
+        public void Move(Cell destination)
+        {
+
+        }
+
+        public void SetWall(WallType wallType, int x, int y)
+        {
+
+        }
     }
 }

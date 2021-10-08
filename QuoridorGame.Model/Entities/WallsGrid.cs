@@ -6,6 +6,7 @@ namespace QuoridorGame.Model.Entities
         Vertical = 1, 
         Horizontal = 2
     }
+
     public class WallsGrid
     {
         public const int GridSize = 8;
