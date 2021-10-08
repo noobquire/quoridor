@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace QuoridorGame.Model.Entities
+namespace QuoridorGame.Model.Logic
 {
     /// <summary>
     /// Provides utility to find shortest path between two nodes in a graph.

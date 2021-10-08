@@ -1,25 +1,21 @@
 ﻿using NUnit.Framework;
 using QuoridorGame.Model.Entities;
-using QuoridorGame.Model.Interfaces;
-using System;
-using System.Collections.Generic;
+using QuoridorGame.Model.Logic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace QuoridorGame.Model.Tests
 {
     [TestFixture]
     public class PathFinderTests
     {
-        private GameField graph;
-        private PathFinder<GameField, Cell> pathFinder;
+        private CellField graph;
+        private PathFinder<CellField, Cell> pathFinder;
 
         [SetUp]
         public void Setup()
         {
-            graph = new GameField();
-            pathFinder = new PathFinder<GameField, Cell>(graph);
+            graph = new CellField();
+            pathFinder = new PathFinder<CellField, Cell>(graph);
         }
 
         [TestCase(0, 4, 8, 4)]
@@ -39,9 +35,9 @@ namespace QuoridorGame.Model.Tests
         {
             for (int i = 0; i < 9; i++)
             {
-                var bottomNegbour = graph.Nodes[5, i];
+                var bottomNeigbour = graph.Nodes[5, i];
                 var newNegibours = graph.Nodes[4, i].AdjacentNodes.ToList();
-                newNegibours.Remove(bottomNegbour);
+                newNegibours.Remove(bottomNeigbour);
                 graph.Nodes[4, i].AdjacentNodes = newNegibours;
             }
         }
