@@ -7,7 +7,7 @@ namespace QuoridorGame.Model.Entities
     /// </summary>
     public class CellField : IGraph<Cell>
     {
-        private const int FieldSize = 9;
+        public const int FieldSize = 9;
         public Cell[,] Nodes { get; set; }
 
         public CellField()
