@@ -3,6 +3,6 @@ namespace QuoridorGame.Model.Interfaces
 {
     public interface IWallPlacer 
     {
-    void PlaceWall(Wall wall, WallType type);
+    void PlaceWall(WallType walltype, int x, int y);
     }
 }
