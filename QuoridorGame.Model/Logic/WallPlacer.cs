@@ -14,8 +14,17 @@ namespace QuoridorGame.Model.Logic
             this.pathfinder = pathfinder;
         }
 
-        public void PlaceWall(Wall wall, WallType type)
+        public void PlaceWall(WallType walltype, int x, int y)
         {
+            try
+            {
+                WallIsPlaceable(walltype, x, y);
+            }
+            catch(QuoridorGameException ex)
+            {
+                throw ex;
+            }
+            gamefield.Walls.Grid[x, y].Type = walltype;
 
         }
         private void WallIsPlaceable(WallType walltype, int x, int y)
