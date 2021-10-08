@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using QuoridorGame.Model.Interfaces;
 
 namespace QuoridorGame.Model.Entities
@@ -17,6 +18,11 @@ namespace QuoridorGame.Model.Entities
         {
             X = x; 
             Y = y;
+        }
+
+        public bool IsAdjacentTo(Cell cell)
+        {
+            return AdjacentNodes.Contains(cell);
         }
     }
 }
