@@ -3,7 +3,7 @@
     public enum WallType
     {
         None,
-        Vertical , 
+        Vertical, 
         Horizontal
     }
 
