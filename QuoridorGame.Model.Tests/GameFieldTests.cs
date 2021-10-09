@@ -18,7 +18,7 @@ namespace QuoridorGame.Model.Tests
         [TestCase(0, 8)]
         [TestCase(8, 0)]
         [TestCase(8, 8)]
-        public void GameField_CornerCells_ShouldHaveTwoAdjacentCells(int i, int j)
+        public void CellField_CornerCells_ShouldHaveTwoAdjacentCells(int i, int j)
         {
             Assert.AreEqual(2, cellField.Nodes[i, j].AdjacentNodes.Count());
         }
@@ -26,7 +26,7 @@ namespace QuoridorGame.Model.Tests
         [TestCase(1, 0)]
         [TestCase(5, 8)]
         [TestCase(8, 3)]
-        public void GameField_BorderCells_ShouldHaveThreeAdjacentCells(int i, int j)
+        public void CellField_BorderCells_ShouldHaveThreeAdjacentCells(int i, int j)
         {
             Assert.AreEqual(3, cellField.Nodes[i, j].AdjacentNodes.Count());
         }
@@ -35,7 +35,7 @@ namespace QuoridorGame.Model.Tests
         [TestCase(3, 5)]
         [TestCase(3, 3)]
         [TestCase(5, 6)]
-        public void GameField_BorderCells_ShouldHaveFourAdjacentCells(int i, int j)
+        public void CellField_BorderCells_ShouldHaveFourAdjacentCells(int i, int j)
         {
             Assert.AreEqual(4, cellField.Nodes[i, j].AdjacentNodes.Count());
         }

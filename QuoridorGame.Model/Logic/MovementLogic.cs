@@ -6,6 +6,9 @@ using Game = QuoridorGame.Model.Entities.QuoridorGame;
 
 namespace QuoridorGame.Model.Logic
 {
+    /// <summary>
+    /// Contains logic for player movement on game field.
+    /// </summary>
     public class MovementLogic
     {
         private readonly Game game;
@@ -15,11 +18,17 @@ namespace QuoridorGame.Model.Logic
             this.game = game;
         }
 
+        /// <summary>
+        /// Moves player to selected cell.
+        /// </summary>
+        /// <param name="player">Selected player.</param>
+        /// <param name="destination">Destination cell.</param>
+        /// <exception cref="QuoridorGameException">Illegal operation.</exception>
         public void MovePlayer(Player player, Cell destination)
         {
-            if(player != game.CurrentPlayer)
+            if (player != game.CurrentPlayer)
             {
-                throw new QuoridorGameException("Currently it's not seleted player's turn");
+                throw new QuoridorGameException("Currently it's not selected player's turn.");
             }
 
             if (!GetAvailableMoves(player.CurrentCell).Contains(destination))
@@ -29,13 +38,13 @@ namespace QuoridorGame.Model.Logic
 
             player.CurrentCell = destination;
 
-            if(IsOnEnemySide(destination))
+            if (IsOnEnemySide(destination))
             {
                 game.Win(game.CurrentPlayer);
                 return;
             }
 
-
+            game.NextTurn();
         }
 
         /// <summary>
@@ -45,6 +54,11 @@ namespace QuoridorGame.Model.Logic
         /// <returns>Available moves.</returns>
         public IEnumerable<Cell> GetAvailableMoves(Cell from)
         {
+            if (game.CurrentPlayer == null)
+            {
+                throw new QuoridorGameException("Game is not in progress.");
+            }
+
             if (from.AdjacentNodes.Contains(game.OpponentPlayer.CurrentCell))
             {
                 var enemyCell = game.OpponentPlayer.CurrentCell;
@@ -67,7 +81,7 @@ namespace QuoridorGame.Model.Logic
             }
         }
 
-        public Side GetSide(Cell from, Cell to)
+        private Side GetSide(Cell from, Cell to)
         {
             if (from.X - 1 > 0 && to == game.GameField.Cells[from.X - 1, from.Y])
             {
@@ -89,7 +103,7 @@ namespace QuoridorGame.Model.Logic
             return Side.NonAdjacent;
         }
 
-        public Cell GetCellAtSide(Cell from, Side side)
+        private Cell GetCellAtSide(Cell from, Side side)
         {
             return side switch
             {
@@ -101,7 +115,7 @@ namespace QuoridorGame.Model.Logic
             };
         }
 
-        public bool IsOnEnemySide(Cell cell)
+        private bool IsOnEnemySide(Cell cell)
         {
             if (game.State == GameState.FirstPlayerTurn && cell.X == CellField.FieldSize - 1)
             {

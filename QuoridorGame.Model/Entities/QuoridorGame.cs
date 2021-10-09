@@ -2,7 +2,7 @@
 {
     public class QuoridorGame
     {
-        public GameState State { get; set; }
+        public GameState State { get; private set; }
         public GameField GameField { get; }
         public Player FirstPlayer { get; }
         public Player SecondPlayer { get; }
@@ -48,7 +48,7 @@
             {
                 State = GameState.SecondPlayerTurn;
             }
-            if (State == GameState.SecondPlayerTurn)
+            else if (State == GameState.SecondPlayerTurn)
             {
                 State = GameState.FirstPlayerTurn;
             }
