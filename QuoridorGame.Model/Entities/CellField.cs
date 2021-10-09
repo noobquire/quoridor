@@ -1,14 +1,16 @@
 ﻿using QuoridorGame.Model.Interfaces;
+using System;
 
 namespace QuoridorGame.Model.Entities
 {
     /// <summary>
     /// Cells on game field on which players can walk.
     /// </summary>
-    public class CellField : IGraph<Cell>
+    [Serializable]
+    public class CellField : IGraph<Cell>, IOriginator<Cell[,]>
     {
         public const int FieldSize = 9;
-        public Cell[,] Nodes { get; set; }
+        public Cell[,] Nodes { get; private set; }
 
         public CellField()
         {
@@ -115,6 +117,18 @@ namespace QuoridorGame.Model.Entities
                 Nodes[FieldSize - 2, FieldSize - 1],
                 Nodes[FieldSize - 1, FieldSize - 2]
             };
+        }
+
+        public IMemento<Cell[,]> Save()
+        {
+            var cellsCopy = Nodes.DeepClone();
+            var snashot = new CellFieldSnapshot(cellsCopy);
+            return snashot;
+        }
+
+        public void Restore(IMemento<Cell[,]> memento)
+        {
+            Nodes = memento.Data;
         }
 
         /// <summary>
