@@ -1,21 +1,27 @@
 ﻿using NUnit.Framework;
 using QuoridorGame.Model.Entities;
+using QuoridorGame.Model.Interfaces;
 using QuoridorGame.Model.Logic;
+using System;
 using System.Linq;
 
 namespace QuoridorGame.Model.Tests
 {
-    [TestFixture]
-    public class PathFinderTests
+    [TestFixture(typeof(PathFinder<CellField, Cell>), typeof(CellField), typeof(Cell))]
+    [TestFixture(typeof(AStarPathFinder<CellField, Cell>), typeof(CellField), typeof(Cell))]
+    public class PathFinderTests<T, TGraph, Node> 
+        where TGraph : IGraph<Node>
+        where Node : IGraphNode<Node>
+        where T : IPathFinder<TGraph, Node>
     {
-        private CellField graph;
-        private PathFinder<CellField, Cell> pathFinder;
+        private IGraph<Node> graph;
+        private IPathFinder<TGraph, Node> pathFinder;
 
         [SetUp]
         public void Setup()
         {
-            graph = new CellField();
-            pathFinder = new PathFinder<CellField, Cell>(graph);
+            graph = (IGraph<Node>)new CellField();
+            pathFinder = (T)Activator.CreateInstance(typeof(T), new object[] { graph });
         }
 
         [TestCase(0, 4, 8, 4)]

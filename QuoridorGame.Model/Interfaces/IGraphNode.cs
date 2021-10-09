@@ -17,5 +17,8 @@ namespace QuoridorGame.Model.Interfaces
         /// Parent node used for path finding.
         /// </summary>
         T ParentNode { get; set; }
+
+        int X { get; }
+        int Y { get; }
     }
 }
