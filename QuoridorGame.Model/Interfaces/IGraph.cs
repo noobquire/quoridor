@@ -9,6 +9,6 @@
         /// <summary>
         /// Nodes of the graph.
         /// </summary>
-        T[,] Nodes { get; set; }
+        T[,] Nodes { get; }
     }
 }
