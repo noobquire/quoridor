@@ -1,6 +1,7 @@
 using QuoridorGame.Model.Interfaces;
 using QuoridorGame.Model.Exceptions;
 using  QuoridorGame.Model.Entities;
+using System.Linq;
 using Game = QuoridorGame.Model.Entities.QuoridorGame;
 
 namespace QuoridorGame.Model.Logic
@@ -18,11 +19,15 @@ namespace QuoridorGame.Model.Logic
         public void PlaceWall(WallType walltype, int x, int y)
         {
             WallIsPlaceable(walltype, x, y);
-            game.GameField.Walls.Grid[x, y].Type = walltype;
-
+            
+            game.NextTurn();
+            
         }
         private void WallIsPlaceable(WallType walltype, int x, int y)
         {
+            /// <summary>
+            /// Checks if wall can be placed at given place. 
+            /// </summary>
             if (x >= WallsGrid.GridSize || y >= WallsGrid.GridSize)
             {
                 throw new QuoridorGameException("WallsGrid index is out of bounds.");
@@ -60,26 +65,52 @@ namespace QuoridorGame.Model.Logic
             }
 
             //Check if player is not trapped
-            if (!PathExists()){
+            if (!PathExists(walltype, x, y)){
                 throw new QuoridorGameException("Can't block plauer with a wall.");
             }
-            
             // Wall may be placed if no exeptions occurred
         }
 
-        private bool PathExists()
+        private bool PathExists(WallType walltype, int x, int y)
         {
-            //var revState = game.GameField.Cells.MemberwiseClone();// Make Deepcopy method
-            //game.GameField.Cells[0,0].AdjacentNodes = game.GameField.Cells[0,0].AdjacentNodes.Where(cell => cell != removedCell)
-            //#removedCell = game.GameField.Cells[0,1]
-            //game.GameField.Cells[0,1].AdjacentNodes = game.GameField.Cells[0,1].AdjacentNodes.Where(cell => cell != removedCell)
-            //#removedCell = game.GameField.Cells[0,0]
+            var prevCells = game.GameField.Cells.Save();
+            game.GameField.Walls.Grid[x, y].Type = walltype;
+            var currentCells = game.GameField.Cells;
+            var currentWalls = game.GameField.Walls.Grid;
+
+            for(int i = 0; i < WallsGrid.GridSize; i++)
+            {
+                for(int j = 0; j < WallsGrid.GridSize; j++)
+                {
+                    if (currentWalls[i,j].Type == WallType.Vertical)
+                    {
+                        //tear left -> right upper node
+                        currentCells[i,j].AdjacentNodes = currentCells[i,j].AdjacentNodes.Where(cell => cell != currentCells[i,j+1]);
+                        //tear left <- right upper node
+                        currentCells[i,j+1].AdjacentNodes = currentCells[i,j+1].AdjacentNodes.Where(cell => cell != currentCells[i,j]);
+                        //tear left -> right lower node
+                        currentCells[i+1,j].AdjacentNodes = currentCells[i+1,j].AdjacentNodes.Where(cell => cell != currentCells[i+1,j+1]);
+                        //tear left <- right lower node
+                        currentCells[i+1,j+1].AdjacentNodes = currentCells[i+1,j+1].AdjacentNodes.Where(cell => cell != currentCells[i+1,j]);
+                    }
+                    if (currentWalls[i,j].Type == WallType.Horizontal)
+                    {   
+                        //tear up -> down left node
+                        currentCells[i,j].AdjacentNodes = currentCells[i,j].AdjacentNodes.Where(cell => cell != currentCells[i+1,j]);
+                        //tear up <- down left node
+                        currentCells[i+1,j].AdjacentNodes = currentCells[i+1,j].AdjacentNodes.Where(cell => cell != currentCells[i,j]);
+                        //tear up -> down right node
+                        currentCells[i,j+1].AdjacentNodes = currentCells[i,j+1].AdjacentNodes.Where(cell => cell != currentCells[i+1,j+1]);
+                        //tear up <- down right node
+                        currentCells[i+1,j+1].AdjacentNodes = currentCells[i+1,j+1].AdjacentNodes.Where(cell => cell != currentCells[i,j+1]);
+                    }
+                }
+            }
 
             Cell firstPlayerCell = game.FirstPlayer.CurrentCell;
             Cell secondPlayerCell = game.SecondPlayer.CurrentCell;
             bool firstPlayerReachable = false;
             bool secondPlayerReachable = false;
-
 
             for (int i = 0; i < CellField.FieldSize; i++)
             {
@@ -99,8 +130,16 @@ namespace QuoridorGame.Model.Logic
                 }
             }
 
-            return firstPlayerReachable && secondPlayerReachable;
-
+            if (firstPlayerReachable && secondPlayerReachable)
+            {
+                return true;
+            }
+            else 
+            {   
+                game.GameField.Walls.Grid[x, y].Type = WallType.None;
+                game.GameField.Cells.Restore(prevCells);
+                return false;
+            }
         }
     }
 }
