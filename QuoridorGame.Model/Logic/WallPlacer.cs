@@ -18,15 +18,14 @@ namespace QuoridorGame.Model.Logic
 
         public void PlaceWall(WallType walltype, int x, int y)
         {
-            WallIsPlaceable(walltype, x, y);
-            
+            PlaceableIfLegal(walltype, x, y);
             game.NextTurn();
             
         }
-        private void WallIsPlaceable(WallType walltype, int x, int y)
+        private void PlaceableIfLegal(WallType walltype, int x, int y)
         {
             /// <summary>
-            /// Checks if wall can be placed at given place. 
+            /// Places wall at given coordinates if it is a legal move.
             /// </summary>
             if (x >= WallsGrid.GridSize || y >= WallsGrid.GridSize)
             {
