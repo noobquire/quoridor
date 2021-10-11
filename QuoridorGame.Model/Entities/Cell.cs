@@ -26,5 +26,11 @@ namespace QuoridorGame.Model.Entities
         {
             return AdjacentNodes.Contains(cell);
         }
+
+        public void RemoveEdge(Cell adjacentNode) 
+        {
+            AdjacentNodes = AdjacentNodes.Where(cell => cell != adjacentNode).ToList();
+            adjacentNode.AdjacentNodes = adjacentNode.AdjacentNodes.Where(cell => cell != this).ToList();
+        }
     }
 }
