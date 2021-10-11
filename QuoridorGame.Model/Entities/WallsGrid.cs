@@ -16,5 +16,10 @@ namespace QuoridorGame.Model.Entities
                 }
             }
         }
+        public Wall this[int x, int y]
+        {
+            get { return Grid[x, y]; }
+            set { Grid[x, y] = value; }
+        }
     }
 }

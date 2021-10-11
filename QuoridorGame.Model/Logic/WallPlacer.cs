@@ -42,8 +42,8 @@ namespace QuoridorGame.Model.Logic
             if (walltype == WallType.Vertical)
             {
                 // Check if no other vertival walls in adjacent positions
-                var up_neigh = x == 0 ? false : (game.GameField.Walls.Grid[x - 1, y].Type == WallType.Vertical);
-                var low_neigh = x == WallsGrid.GridSize - 1 ? false : (game.GameField.Walls.Grid[x + 1, y].Type == WallType.Vertical);
+                var up_neigh = x == 0 ? false : (game.GameField.Walls[x - 1, y].Type == WallType.Vertical);
+                var low_neigh = x == WallsGrid.GridSize - 1 ? false : (game.GameField.Walls[x + 1, y].Type == WallType.Vertical);
 
                 if (up_neigh || low_neigh)
                 {
@@ -53,8 +53,8 @@ namespace QuoridorGame.Model.Logic
             else
             {
                 // Check if no other horizontal walls in adjacent positions
-                var left_neigh = y == 0 ? false : (game.GameField.Walls.Grid[x, y - 1].Type == WallType.Horizontal);
-                var right_neigh = y == WallsGrid.GridSize - 1 ? false : (game.GameField.Walls.Grid[x, y+1].Type == WallType.Horizontal);
+                var left_neigh = y == 0 ? false : (game.GameField.Walls[x, y - 1].Type == WallType.Horizontal);
+                var right_neigh = y == WallsGrid.GridSize - 1 ? false : (game.GameField.Walls[x, y+1].Type == WallType.Horizontal);
 
                 if (left_neigh || right_neigh)
                 {
@@ -73,7 +73,7 @@ namespace QuoridorGame.Model.Logic
         private bool PathExists(WallType walltype, int x, int y)
         {
             var prevCells = game.GameField.Cells.Save();
-            game.GameField.Walls.Grid[x, y].Type = walltype;
+            game.GameField.Walls[x, y].Type = walltype;
             var currentCells = game.GameField.Cells;
             var currentWalls = game.GameField.Walls.Grid;
 
@@ -122,7 +122,7 @@ namespace QuoridorGame.Model.Logic
             }
             else 
             {   
-                game.GameField.Walls.Grid[x, y].Type = WallType.None;
+                game.GameField.Walls[x, y].Type = WallType.None;
                 game.GameField.Cells.Restore(prevCells);
                 return false;
             }
