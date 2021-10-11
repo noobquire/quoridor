@@ -41,8 +41,7 @@ namespace QuoridorGame.Model.Tests
         [TestCase(7, 7)]
         public void WallIsNotPlaceable_PositionAlreadyTaken(int x, int y)
         {
-            System.Console.WriteLine(grid.Grid[x, y].Type.ToString());
-            grid.Grid[x, y].Type = WallType.Vertical;
+            wallPlacer.PlaceWall(WallType.Vertical, x, y);
             QuoridorGameException ex = Assert.Throws<QuoridorGameException>(
                 () => wallPlacer.PlaceWall(WallType.None, x, y)
             );
@@ -66,7 +65,7 @@ namespace QuoridorGame.Model.Tests
         [TestCase(3, 3)]
         public void WallIsNotPlaceable_UpperVerticalBlock(int x, int y)
         {
-            grid.Grid[x-1, y].Type = WallType.Vertical;
+            wallPlacer.PlaceWall(WallType.Vertical, x - 1, y);
             QuoridorGameException ex = Assert.Throws<QuoridorGameException>(
                 () => wallPlacer.PlaceWall(WallType.Vertical, x, y)
             );
@@ -79,7 +78,7 @@ namespace QuoridorGame.Model.Tests
         [TestCase(3, 3)]
         public void WallIsNotPlaceable_LowerVerticalBlock(int x, int y)
         {
-            grid.Grid[x + 1, y].Type = WallType.Vertical;
+            wallPlacer.PlaceWall(WallType.Vertical, x+1, y);
             QuoridorGameException ex = Assert.Throws<QuoridorGameException>(
                 () => wallPlacer.PlaceWall(WallType.Vertical, x, y)
             );
@@ -91,7 +90,7 @@ namespace QuoridorGame.Model.Tests
         [TestCase(3, 3)]
         public void WallIsNotPlaceable_LeftHorizontalBlock(int x, int y)
         {
-            grid.Grid[x, y-1].Type = WallType.Horizontal;
+            wallPlacer.PlaceWall(WallType.Horizontal, x, y -1);
             QuoridorGameException ex = Assert.Throws<QuoridorGameException>(
                 () => wallPlacer.PlaceWall(WallType.Horizontal, x, y)
             );
@@ -103,7 +102,7 @@ namespace QuoridorGame.Model.Tests
         [TestCase(3, 3)]
         public void WallIsNotPlaceable_RigtHorizontalBlock(int x, int y)
         {
-            grid.Grid[x, y + 1].Type = WallType.Horizontal;
+            wallPlacer.PlaceWall(WallType.Horizontal, x, y+1);
             QuoridorGameException ex = Assert.Throws<QuoridorGameException>(
                 () => wallPlacer.PlaceWall(WallType.Horizontal, x, y)
             );
@@ -116,7 +115,7 @@ namespace QuoridorGame.Model.Tests
         [TestCase(1, 0, 1, 1)]
         public void WallIsPlaceable_Corner(int x1, int y1, int x2, int y2)
         {
-            grid.Grid[x1, y1].Type = WallType.Horizontal;
+            wallPlacer.PlaceWall(WallType.Horizontal, x1, y1);
             Assert.DoesNotThrow(() => wallPlacer.PlaceWall(WallType.Vertical, x2, y2));
         }
 
@@ -126,7 +125,7 @@ namespace QuoridorGame.Model.Tests
         [TestCase(0, 0, 0, 7)]
         public void WallIsPlaceable_Vertical(int x1, int y1, int x2, int y2)
         {
-            grid.Grid[x1, y1].Type = WallType.Vertical;
+            wallPlacer.PlaceWall(WallType.Vertical, x1, y1);
             Assert.DoesNotThrow(() => wallPlacer.PlaceWall(WallType.Vertical, x2, y2));
         }
 
@@ -136,7 +135,7 @@ namespace QuoridorGame.Model.Tests
         [TestCase(0, 0, 7, 0)]
         public void WallIsPlaceable_Horizontal(int x1, int y1, int x2, int y2)
         {
-            grid.Grid[x1, y1].Type = WallType.Horizontal;
+            wallPlacer.PlaceWall(WallType.Horizontal, x1, y1);
             Assert.DoesNotThrow(() => wallPlacer.PlaceWall(WallType.Horizontal, x2, y2));
         }
     }
