@@ -65,7 +65,7 @@ namespace QuoridorGame.Model.Logic
 
             //Check if player is not trapped
             if (!PathExists(walltype, x, y)){
-                throw new QuoridorGameException("Can't block plauer with a wall.");
+                throw new QuoridorGameException("Can't block player with a wall.");
             }
             // Wall may be placed if no exeptions occurred
         }
@@ -109,7 +109,7 @@ namespace QuoridorGame.Model.Logic
 
             for (int n = 0; n < CellField.FieldSize; n++)
             {
-                if (pathfinder.PathExists(firstPlayerCell, game.GameField.Cells[CellField.FieldSize - 1, n]))
+                if (pathfinder.PathExists(secondPlayerCell, game.GameField.Cells[CellField.FieldSize - 1, n]))
                 {
                     secondPlayerReachable = true;
                     break;
