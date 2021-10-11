@@ -137,10 +137,10 @@ namespace QuoridorGame.Model.Entities
         /// <param name="x">Row of array.</param>
         /// <param name="y">Column of array.</param>
         /// <returns>Cell at specified index.</returns>
-        public Cell this[int x, int y] 
-        { 
+        public Cell this[int x, int y]
+        {
             get { return Nodes[x, y]; }
-            set {  Nodes[x, y] = value; }
+            set { Nodes[x, y] = value; }
         }
 
     }
