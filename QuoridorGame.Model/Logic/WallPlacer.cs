@@ -77,33 +77,20 @@ namespace QuoridorGame.Model.Logic
             var currentCells = game.GameField.Cells;
             var currentWalls = game.GameField.Walls.Grid;
 
-            for(int i = 0; i < WallsGrid.GridSize; i++)
+
+            if (currentWalls[x,y].Type == WallType.Vertical)
             {
-                for(int j = 0; j < WallsGrid.GridSize; j++)
-                {
-                    if (currentWalls[i,j].Type == WallType.Vertical)
-                    {
-                        //tear left -> right upper node
-                        currentCells[i,j].AdjacentNodes = currentCells[i,j].AdjacentNodes.Where(cell => cell != currentCells[i,j+1]);
-                        //tear left <- right upper node
-                        currentCells[i,j+1].AdjacentNodes = currentCells[i,j+1].AdjacentNodes.Where(cell => cell != currentCells[i,j]);
-                        //tear left -> right lower node
-                        currentCells[i+1,j].AdjacentNodes = currentCells[i+1,j].AdjacentNodes.Where(cell => cell != currentCells[i+1,j+1]);
-                        //tear left <- right lower node
-                        currentCells[i+1,j+1].AdjacentNodes = currentCells[i+1,j+1].AdjacentNodes.Where(cell => cell != currentCells[i+1,j]);
-                    }
-                    if (currentWalls[i,j].Type == WallType.Horizontal)
-                    {   
-                        //tear up -> down left node
-                        currentCells[i,j].AdjacentNodes = currentCells[i,j].AdjacentNodes.Where(cell => cell != currentCells[i+1,j]);
-                        //tear up <- down left node
-                        currentCells[i+1,j].AdjacentNodes = currentCells[i+1,j].AdjacentNodes.Where(cell => cell != currentCells[i,j]);
-                        //tear up -> down right node
-                        currentCells[i,j+1].AdjacentNodes = currentCells[i,j+1].AdjacentNodes.Where(cell => cell != currentCells[i+1,j+1]);
-                        //tear up <- down right node
-                        currentCells[i+1,j+1].AdjacentNodes = currentCells[i+1,j+1].AdjacentNodes.Where(cell => cell != currentCells[i,j+1]);
-                    }
-                }
+                //tear left <-> right upper edge
+                currentCells[x, y].RemoveEdge(currentCells[x, y + 1]);
+                //tear left <-> right lower edge
+                currentCells[x + 1, y].RemoveEdge(currentCells[x + 1, y + 1]);
+            }
+            if (currentWalls[x,y].Type == WallType.Horizontal)
+            {
+                //tear up <-> down left node
+                currentCells[x, y].RemoveEdge(currentCells[x + 1, y]);
+                //tear up -> down right node
+                currentCells[x, y + 1].RemoveEdge(currentCells[x + 1, y + 1]);
             }
 
             Cell firstPlayerCell = game.FirstPlayer.CurrentCell;
@@ -111,18 +98,18 @@ namespace QuoridorGame.Model.Logic
             bool firstPlayerReachable = false;
             bool secondPlayerReachable = false;
 
-            for (int i = 0; i < CellField.FieldSize; i++)
+            for (int n = 0; n < CellField.FieldSize; n++)
             {
-                if (pathfinder.PathExists(firstPlayerCell, game.GameField.Cells[0, i]))
+                if (pathfinder.PathExists(firstPlayerCell, game.GameField.Cells[0, n]))
                 {
                     firstPlayerReachable = true;
                     break;
                 }
             }
 
-            for (int i = 0; i < CellField.FieldSize; i++)
+            for (int n = 0; n < CellField.FieldSize; n++)
             {
-                if (pathfinder.PathExists(firstPlayerCell, game.GameField.Cells[CellField.FieldSize - 1, i]))
+                if (pathfinder.PathExists(firstPlayerCell, game.GameField.Cells[CellField.FieldSize - 1, n]))
                 {
                     secondPlayerReachable = true;
                     break;
