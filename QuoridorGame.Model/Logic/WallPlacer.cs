@@ -1,7 +1,6 @@
 using QuoridorGame.Model.Interfaces;
 using QuoridorGame.Model.Exceptions;
-using  QuoridorGame.Model.Entities;
-using System.Linq;
+using QuoridorGame.Model.Entities;
 using Game = QuoridorGame.Model.Entities.QuoridorGame;
 
 namespace QuoridorGame.Model.Logic
@@ -20,7 +19,7 @@ namespace QuoridorGame.Model.Logic
         {
             PlaceableIfLegal(walltype, x, y);
             game.NextTurn();
-            
+
         }
         private void PlaceableIfLegal(WallType walltype, int x, int y)
         {
@@ -31,13 +30,13 @@ namespace QuoridorGame.Model.Logic
             {
                 throw new QuoridorGameException("WallsGrid index is out of bounds.");
             }
-            if (game.GameField.Walls.Grid[x, y].Type != WallType.None) 
+            if (game.GameField.Walls.Grid[x, y].Type != WallType.None)
             {
-                throw new QuoridorGameException( "Position already taken by other wall.");
+                throw new QuoridorGameException("Position already taken by other wall.");
             }
             if (walltype == WallType.None)
             {
-                throw new QuoridorGameException( "WallType can not be WallType:None.");
+                throw new QuoridorGameException("WallType can not be WallType:None.");
             }
             if (walltype == WallType.Vertical)
             {
@@ -47,14 +46,14 @@ namespace QuoridorGame.Model.Logic
 
                 if (up_neigh || low_neigh)
                 {
-                    throw new QuoridorGameException( "Position is blocked by another vertical wall.");
+                    throw new QuoridorGameException("Position is blocked by another vertical wall.");
                 }
             }
             else
             {
                 // Check if no other horizontal walls in adjacent positions
                 var left_neigh = y == 0 ? false : (game.GameField.Walls[x, y - 1].Type == WallType.Horizontal);
-                var right_neigh = y == WallsGrid.GridSize - 1 ? false : (game.GameField.Walls[x, y+1].Type == WallType.Horizontal);
+                var right_neigh = y == WallsGrid.GridSize - 1 ? false : (game.GameField.Walls[x, y + 1].Type == WallType.Horizontal);
 
                 if (left_neigh || right_neigh)
                 {
@@ -64,7 +63,8 @@ namespace QuoridorGame.Model.Logic
             }
 
             //Check if player is not trapped
-            if (!PathExists(walltype, x, y)){
+            if (!PathExists(walltype, x, y))
+            {
                 throw new QuoridorGameException("Can't block player with a wall.");
             }
             // Wall may be placed if no exeptions occurred
@@ -78,14 +78,14 @@ namespace QuoridorGame.Model.Logic
             var currentWalls = game.GameField.Walls.Grid;
 
 
-            if (currentWalls[x,y].Type == WallType.Vertical)
+            if (currentWalls[x, y].Type == WallType.Vertical)
             {
                 //tear left <-> right upper edge
                 currentCells[x, y].RemoveEdge(currentCells[x, y + 1]);
                 //tear left <-> right lower edge
                 currentCells[x + 1, y].RemoveEdge(currentCells[x + 1, y + 1]);
             }
-            if (currentWalls[x,y].Type == WallType.Horizontal)
+            if (currentWalls[x, y].Type == WallType.Horizontal)
             {
                 //tear up <-> down left node
                 currentCells[x, y].RemoveEdge(currentCells[x + 1, y]);
@@ -120,8 +120,8 @@ namespace QuoridorGame.Model.Logic
             {
                 return true;
             }
-            else 
-            {   
+            else
+            {
                 game.GameField.Walls[x, y].Type = WallType.None;
                 game.GameField.Cells.Restore(prevCells);
                 return false;
