@@ -1,5 +1,6 @@
 ﻿using QuoridorGame.Model.Entities;
 using QuoridorGame.Model.Exceptions;
+using QuoridorGame.Model.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using Game = QuoridorGame.Model.Entities.QuoridorGame;
@@ -9,7 +10,7 @@ namespace QuoridorGame.Model.Logic
     /// <summary>
     /// Contains logic for player movement on game field.
     /// </summary>
-    public class MovementLogic
+    public class MovementLogic : IMovementLogic
     {
         private readonly Game game;
 
