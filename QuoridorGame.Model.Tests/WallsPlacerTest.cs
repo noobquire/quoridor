@@ -22,7 +22,7 @@ namespace QuoridorGame.Model.Tests
             grid = game.GameField.Walls;
         }
 
-        
+
         [TestCase(0, 8)]
         [TestCase(8, 0)]
         [TestCase(8, 8)]
@@ -34,7 +34,7 @@ namespace QuoridorGame.Model.Tests
                 () => wallPlacer.PlaceWall(WallType.None, x, y)
             );
             Assert.That(ex.Message, Is.EqualTo("WallsGrid index is out of bounds."));
-            
+
         }
 
         [TestCase(0, 0)]
@@ -79,7 +79,7 @@ namespace QuoridorGame.Model.Tests
         [TestCase(3, 3)]
         public void WallIsNotPlaceable_LowerVerticalBlock(int x, int y)
         {
-            wallPlacer.PlaceWall(WallType.Vertical, x+1, y);
+            wallPlacer.PlaceWall(WallType.Vertical, x + 1, y);
             QuoridorGameException ex = Assert.Throws<QuoridorGameException>(
                 () => wallPlacer.PlaceWall(WallType.Vertical, x, y)
             );
@@ -91,7 +91,7 @@ namespace QuoridorGame.Model.Tests
         [TestCase(3, 3)]
         public void WallIsNotPlaceable_LeftHorizontalBlock(int x, int y)
         {
-            wallPlacer.PlaceWall(WallType.Horizontal, x, y -1);
+            wallPlacer.PlaceWall(WallType.Horizontal, x, y - 1);
             QuoridorGameException ex = Assert.Throws<QuoridorGameException>(
                 () => wallPlacer.PlaceWall(WallType.Horizontal, x, y)
             );
@@ -103,7 +103,7 @@ namespace QuoridorGame.Model.Tests
         [TestCase(3, 3)]
         public void WallIsNotPlaceable_RigtHorizontalBlock(int x, int y)
         {
-            wallPlacer.PlaceWall(WallType.Horizontal, x, y+1);
+            wallPlacer.PlaceWall(WallType.Horizontal, x, y + 1);
             QuoridorGameException ex = Assert.Throws<QuoridorGameException>(
                 () => wallPlacer.PlaceWall(WallType.Horizontal, x, y)
             );
@@ -193,7 +193,7 @@ namespace QuoridorGame.Model.Tests
             wallPlacer.PlaceWall(WallType.Vertical, 5, 0);
             wallPlacer.PlaceWall(WallType.Vertical, 5, 1);
             wallPlacer.PlaceWall(WallType.Vertical, 7, 0);
-            
+
             Assert.DoesNotThrow(() => wallPlacer.PlaceWall(WallType.Vertical, 7, 1));
         }
 
