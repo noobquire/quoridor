@@ -1,25 +1,27 @@
 ﻿using NUnit.Framework;
 using QuoridorGame.Model.Entities;
 using QuoridorGame.Model.Interfaces;
+using QuoridorGame.Model.Logic;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace QuoridorGame.Model.Tests
 {
-    [TestFixture]
-    public class PathFinderTests
+    [TestFixture(typeof(PathFinder<CellField, Cell>), typeof(CellField), typeof(Cell))]
+    [TestFixture(typeof(AStarPathFinder<CellField, Cell>), typeof(CellField), typeof(Cell))]
+    public class PathFinderTests<T, TGraph, Node> 
+        where TGraph : IGraph<Node>
+        where Node : IGraphNode<Node>
+        where T : IPathFinder<TGraph, Node>
     {
-        private GameField graph;
-        private PathFinder<GameField, Cell> pathFinder;
+        private IGraph<Node> graph;
+        private IPathFinder<TGraph, Node> pathFinder;
 
         [SetUp]
         public void Setup()
         {
-            graph = new GameField();
-            pathFinder = new PathFinder<GameField, Cell>(graph);
+            graph = (IGraph<Node>)new CellField();
+            pathFinder = (T)Activator.CreateInstance(typeof(T), new object[] { graph });
         }
 
         [TestCase(0, 4, 8, 4)]
@@ -39,9 +41,9 @@ namespace QuoridorGame.Model.Tests
         {
             for (int i = 0; i < 9; i++)
             {
-                var bottomNegbour = graph.Nodes[5, i];
+                var bottomNeigbour = graph.Nodes[5, i];
                 var newNegibours = graph.Nodes[4, i].AdjacentNodes.ToList();
-                newNegibours.Remove(bottomNegbour);
+                newNegibours.Remove(bottomNeigbour);
                 graph.Nodes[4, i].AdjacentNodes = newNegibours;
             }
         }

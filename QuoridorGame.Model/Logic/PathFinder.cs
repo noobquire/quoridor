@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace QuoridorGame.Model.Entities
+namespace QuoridorGame.Model.Logic
 {
     /// <summary>
     /// Provides utility to find shortest path between two nodes in a graph.
@@ -14,7 +14,7 @@ namespace QuoridorGame.Model.Entities
         where TGraph : IGraph<TNode>
         where TNode : IGraphNode<TNode>
     {
-        private readonly IGraph<TNode> graph;
+        protected readonly IGraph<TNode> graph;
 
         /// <summary>
         /// Initializes a new instance of <see cref="PathFinder{TGraph, TNode}"/> class.
@@ -31,7 +31,7 @@ namespace QuoridorGame.Model.Entities
         /// <param name="start">Start node.</param>
         /// <param name="finish">Finish node.</param>
         /// <returns>Shortest path if it exists, empty enumeration otherwise.</returns>
-        public IEnumerable<TNode> FindShortestPath(TNode start, TNode finish)
+        public virtual IEnumerable<TNode> FindShortestPath(TNode start, TNode finish)
         {
             var allNodes = graph.Nodes.Flatten();
 
@@ -40,7 +40,6 @@ namespace QuoridorGame.Model.Entities
                 return Enumerable.Empty<TNode>();
             }
 
-            //var visitedNodes = new HashSet<TNode>();
             var path = new List<TNode>();
             var queue = new Queue<TNode>();
             queue.Enqueue(start);
@@ -51,7 +50,7 @@ namespace QuoridorGame.Model.Entities
 
                 if (node.Equals(finish))
                 {
-                    return GetPathFromParents(start, finish); // no, queue is current layer, not path
+                    return GetPathFromParents(start, finish);
                 }
 
                 foreach (var adjacentNode in node.AdjacentNodes)
@@ -70,7 +69,7 @@ namespace QuoridorGame.Model.Entities
             return Enumerable.Empty<TNode>();
         }
 
-        private IEnumerable<TNode> GetPathFromParents(TNode start, TNode finish)
+        protected IEnumerable<TNode> GetPathFromParents(TNode start, TNode finish)
         {
             var path = new List<TNode>();
             var currentNode = finish;
