@@ -2,7 +2,7 @@ namespace QuoridorGame.Model.Entities
 {
     public class WallsGrid
     {
-        public const int GridSize = 7;
+        public const int GridSize = 8;
         public Wall[,] Grid { get; set; }
 
         public WallsGrid()

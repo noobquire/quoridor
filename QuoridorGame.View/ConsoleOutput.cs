@@ -13,6 +13,7 @@ namespace QuoridorGame.View
             this.game = game;
             game.PlayerWon += OnPlayerWon;
             game.GameStarted += OnFieldUpdated;
+            game.FieldUpdated += OnFieldUpdated;
         }
 
         private void OnPlayerWon(Player player)
@@ -28,15 +29,35 @@ namespace QuoridorGame.View
             {
                 for (int j = 0; j < 9; j++)
                 {
-                    Console.Write($"{cellGrid[i, j]}");
+                    Console.Write($"{c(cellGrid[i, j])}");
                 }
-                if (i < 6)
+                Console.WriteLine();
+                if (i < 8)
                 {
-                    for (int z = 0; z < 7; z++)
+                    for (int z = 0; z < 8; z++)
                     {
-                        Console.Write($"{wallGrid[i, z]}");
+                        Console.Write($"{w(wallGrid[i, z])}");
                     }
                 }
+                Console.WriteLine();
+            }
+
+            string c(Cell cell)
+            {
+                var firstPlayerPosition = game.FirstPlayer.CurrentCell;
+                var secondPlayerPosition = game.SecondPlayer.CurrentCell;
+                return (cell.X == firstPlayerPosition.X && cell.Y == firstPlayerPosition.Y) || (cell.X == secondPlayerPosition.X && cell.Y == secondPlayerPosition.Y)
+                    ? "P" : ".";
+            }
+
+            string w(Wall wall)
+            {
+                return wall.Type switch
+                {
+                    WallType.None => " ",
+                    WallType.Horizontal => "-",
+                    WallType.Vertical => "|"
+                };
             }
         }
     }

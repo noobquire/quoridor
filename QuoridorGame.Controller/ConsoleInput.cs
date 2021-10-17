@@ -14,7 +14,7 @@ namespace QuoridorGame.Controller
             {
                 command = Console.ReadLine();
                 var splitCommand = command.Split(Array.Empty<char>());
-                switch (command)
+                switch (splitCommand[0].ToLower())
                 {
                     case "start":
                         game.Start();
@@ -26,7 +26,7 @@ namespace QuoridorGame.Controller
                         var moveY = int.Parse(splitCommand[2]);
                         game.Move(moveX, moveY);
                         break;
-                    case "place wall":
+                    case "wall":
                         var wallX = int.Parse(splitCommand[1]);
                         var wallyY = int.Parse(splitCommand[2]);
                         var wallType = (WallType) Enum.Parse(typeof(WallType), splitCommand[3]);
