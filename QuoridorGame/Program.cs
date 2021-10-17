@@ -1,8 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using QuoridorGame.Controller;
+using QuoridorGame.Model.Entities;
 using QuoridorGame.Model.Interfaces;
 using QuoridorGame.Model.Logic;
+using QuoridorGame.View;
 using Game = QuoridorGame.Model.Entities.QuoridorGame;
-using QuoridorGame.Model.Entities;
 
 namespace QuoridorGame
 {
@@ -10,18 +12,24 @@ namespace QuoridorGame
     {
         static void Main()
         {
+            var serviceCollection = new ServiceCollection();
             var game = new Game();
-            var services = new ServiceCollection();
-            services.AddSingleton(game);
-            services.AddScoped<IGraph<Cell>>(c => game.GameField.Cells);
-            services.AddScoped<IPathFinder<CellField, Cell>, AStarPathFinder<CellField, Cell>>();
-            services.AddScoped<IWallPlacer, WallPlacer>();
-            services.AddScoped<IMovementLogic, MovementLogic>();
-            services.AddScoped<IQuoridorGameFacade, QuoridorGameFacade>();
+            serviceCollection.AddSingleton(game)
+                             .AddScoped<IGraph<Cell>>(c => game.GameField.Cells);
+            ConfigureServices(serviceCollection);
+            var output = new ConsoleOutput();
+            output.ListenTo(game);
+            var input = new ConsoleInput();
+            input.StartProcessing(game);
+        }
 
-            var serviceProvider = services.BuildServiceProvider();
-            // var runner = serviceProvider.GetService<IGameRunner>();
-            // runner.Run(); // start listening to user inputs
+        private static void ConfigureServices(IServiceCollection serviceCollection)
+        {
+            serviceCollection
+            .AddScoped<IPathFinder<CellField, Cell>, PathFinder<CellField, Cell>>()
+            .AddScoped<IWallPlacer, WallPlacer>()
+            .AddScoped<IMovementLogic, MovementLogic>()
+            .AddScoped<IQuoridorGameFacade, QuoridorGameFacade>();
         }
     }
 }

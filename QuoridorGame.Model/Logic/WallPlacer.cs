@@ -41,8 +41,8 @@ namespace QuoridorGame.Model.Logic
             if (walltype == WallType.Vertical)
             {
                 // Check if no other vertival walls in adjacent positions
-                var up_neigh = x == 0 ? false : (game.GameField.Walls[x - 1, y].Type == WallType.Vertical);
-                var low_neigh = x == WallsGrid.GridSize - 1 ? false : (game.GameField.Walls[x + 1, y].Type == WallType.Vertical);
+                var up_neigh = x != 0 && (game.GameField.Walls[x - 1, y].Type == WallType.Vertical);
+                var low_neigh = x != WallsGrid.GridSize - 1 && (game.GameField.Walls[x + 1, y].Type == WallType.Vertical);
 
                 if (up_neigh || low_neigh)
                 {
@@ -52,8 +52,8 @@ namespace QuoridorGame.Model.Logic
             else
             {
                 // Check if no other horizontal walls in adjacent positions
-                var left_neigh = y == 0 ? false : (game.GameField.Walls[x, y - 1].Type == WallType.Horizontal);
-                var right_neigh = y == WallsGrid.GridSize - 1 ? false : (game.GameField.Walls[x, y + 1].Type == WallType.Horizontal);
+                var left_neigh = y != 0 && (game.GameField.Walls[x, y - 1].Type == WallType.Horizontal);
+                var right_neigh = y != WallsGrid.GridSize - 1 && (game.GameField.Walls[x, y + 1].Type == WallType.Horizontal);
 
                 if (left_neigh || right_neigh)
                 {
