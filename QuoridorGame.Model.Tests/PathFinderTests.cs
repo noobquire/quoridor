@@ -8,7 +8,6 @@ using System.Linq;
 namespace QuoridorGame.Model.Tests
 {
     [TestFixture(typeof(PathFinder<CellField, Cell>), typeof(CellField), typeof(Cell))]
-    [TestFixture(typeof(AStarPathFinder<CellField, Cell>), typeof(CellField), typeof(Cell))]
     public class PathFinderTests<T, TGraph, Node> 
         where TGraph : IGraph<Node>
         where Node : IGraphNode<Node>

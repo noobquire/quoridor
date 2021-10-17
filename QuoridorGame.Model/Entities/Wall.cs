@@ -13,7 +13,7 @@
 
         public Wall()
         {
-            this.Type = WallType.None;
+            Type = WallType.None;
         }
     }
 }
