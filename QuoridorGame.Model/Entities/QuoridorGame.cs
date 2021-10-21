@@ -10,8 +10,8 @@ namespace QuoridorGame.Model.Entities
         private readonly IWallPlacer wallPlacer;
         private readonly IMovementLogic movementLogic;
 
-        public event Action<GameField> GameStarted;
-        public event Action<GameField> FieldUpdated;
+        public event Action<QuoridorGame> GameStarted;
+        public event Action<QuoridorGame> FieldUpdated;
         public event Action<Player> PlayerWon;
 
         public GameState State { get; private set; }
@@ -76,7 +76,7 @@ namespace QuoridorGame.Model.Entities
             {
                 State = GameState.FirstPlayerTurn;
             }
-            GameStarted?.Invoke(GameField);
+            GameStarted?.Invoke(this);
         }
 
         public void Move(int x, int y)
@@ -86,13 +86,13 @@ namespace QuoridorGame.Model.Entities
                 throw new QuoridorGameException("Index was out of bounds");
             }
             movementLogic.MovePlayer(CurrentPlayer, GameField.Cells[x, y]);
-            FieldUpdated?.Invoke(GameField);
+            FieldUpdated?.Invoke(this);
         }
 
         public void SetWall(WallType wallType, int x, int y)
         {
             wallPlacer.PlaceWall(wallType, x, y);
-            FieldUpdated?.Invoke(GameField);
+            FieldUpdated?.Invoke(this);
         }
     }
 }

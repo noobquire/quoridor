@@ -9,7 +9,7 @@ namespace QuoridorGame.Controller
         public void StartProcessing(Game game)
         {
             string command;
-            Console.WriteLine("Welcome to quorridor game!");
+            Console.WriteLine("Welcome to quoridor game!");
             while (true)
             {
                 command = Console.ReadLine();
@@ -29,7 +29,7 @@ namespace QuoridorGame.Controller
                     case "wall":
                         var wallX = int.Parse(splitCommand[1]);
                         var wallyY = int.Parse(splitCommand[2]);
-                        var wallType = (WallType) Enum.Parse(typeof(WallType), splitCommand[3]);
+                         var wallType = (WallType) Enum.Parse(typeof(WallType), splitCommand[3]);
                         game.SetWall(wallType, wallX, wallyY);
                         break;
                 }
