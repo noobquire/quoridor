@@ -1,4 +1,4 @@
-using QuoridorGame.Model.Entities;
+using QuoridorGame.Model.Events;
 using System;
 using Game = QuoridorGame.Model.Entities.QuoridorGame;
 
@@ -6,59 +6,41 @@ namespace QuoridorGame.View
 {
     public class ConsoleOutput
     {
-        private Game game;
-
         public void ListenTo(Game game)
         {
-            this.game = game;
-            game.PlayerWon += OnPlayerWon;
-            game.GameStarted += OnFieldUpdated;
+            game.GameWon += OnPlayerWon;
+            game.GameStarted += OnGameStarted;
             game.FieldUpdated += OnFieldUpdated;
+            game.NewTurn += OnNewTurn;
         }
 
-        private void OnPlayerWon(Player player)
+        private void OnNewTurn(object? sender, NextTurnEventArgs e)
         {
-            Console.WriteLine($"Game is over! Player {player} has won!");
+            var playerNumberWord = e.PlayerNumber == 1 ? "First" : "Second";
+            Console.WriteLine($"{playerNumberWord} player's turn.");
+            Console.WriteLine("Type 'move X Y' to move");
+            Console.WriteLine("Type 'wall X Y' to place wall");
         }
 
-        public void OnFieldUpdated(GameField gameField)
+        private void OnGameStarted(object? sender, GameStartedEventArgs e)
         {
-            var cellGrid = gameField.Cells;
-            var wallGrid = gameField.Walls;
-            for (int i = 0; i < 9; i++)
-            {
-                for (int j = 0; j < 9; j++)
-                {
-                    Console.Write($"{c(cellGrid[i, j])}");
-                }
-                Console.WriteLine();
-                if (i < 8)
-                {
-                    for (int z = 0; z < 8; z++)
-                    {
-                        Console.Write($"{w(wallGrid[i, z])}");
-                    }
-                }
-                Console.WriteLine();
-            }
+            Console.WriteLine("Game has started!");
+        }
 
-            string c(Cell cell)
-            {
-                var firstPlayerPosition = game.FirstPlayer.CurrentCell;
-                var secondPlayerPosition = game.SecondPlayer.CurrentCell;
-                return (cell.X == firstPlayerPosition.X && cell.Y == firstPlayerPosition.Y) || (cell.X == secondPlayerPosition.X && cell.Y == secondPlayerPosition.Y)
-                    ? "P" : ".";
-            }
+        private void OnPlayerWon(object? sender, GameWonEventArgs e)
+        {
+            Console.WriteLine($"Player {e.PlayerNumber} has won!");
+            Console.WriteLine("Type 'start' to start a new game.");
+            Console.WriteLine("Type 'exit' to exit.");
+        }
 
-            string w(Wall wall)
-            {
-                return wall.Type switch
-                {
-                    WallType.None => " ",
-                    WallType.Horizontal => "-",
-                    WallType.Vertical => "|"
-                };
-            }
+        public void OnFieldUpdated(object? sender, FieldUpdatedEventArgs e)
+        {
+            var action = e.Type == UpdateType.Move ? "moved to" : "placed wall at";
+            Console.WriteLine($"Player {e.PlayerNumber} has {action} ({e.X}, {e.Y})");
+            var game = sender as Game;
+            var view = new GameViewModel(game);
+            view.Print();
         }
     }
 }
