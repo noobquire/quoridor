@@ -26,6 +26,10 @@ namespace QuoridorGame.Model.Logic
             /// <summary>
             /// Places wall at given coordinates if it is a legal move.
             /// </summary>
+            if (game.CurrentPlayer.WallsCount == 0) 
+            {
+                throw new QuoridorGameException("No walls left.");
+            }
             if (x >= WallsGrid.GridSize || y >= WallsGrid.GridSize)
             {
                 throw new QuoridorGameException("WallsGrid index is out of bounds.");
@@ -118,6 +122,7 @@ namespace QuoridorGame.Model.Logic
 
             if (firstPlayerReachable && secondPlayerReachable)
             {
+                game.CurrentPlayer.WallsCount -= 1;
                 return true;
             }
             else
