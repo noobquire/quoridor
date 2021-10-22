@@ -1,4 +1,4 @@
-using QuoridorGame.Model.Entities;
+using QuoridorGame.Model.Events;
 using System;
 using Game = QuoridorGame.Model.Entities.QuoridorGame;
 
@@ -8,18 +8,37 @@ namespace QuoridorGame.View
     {
         public void ListenTo(Game game)
         {
-            game.PlayerWon += OnPlayerWon;
-            game.GameStarted += OnFieldUpdated;
+            game.GameWon += OnPlayerWon;
+            game.GameStarted += OnGameStarted;
             game.FieldUpdated += OnFieldUpdated;
+            game.NewTurn += OnNewTurn;
         }
 
-        private void OnPlayerWon(Player player)
+        private void OnNewTurn(object? sender, NextTurnEventArgs e)
         {
-            Console.WriteLine($"Game is over! Player {player} has won!");
+            var playerNumberWord = e.PlayerNumber == 1 ? "First" : "Second";
+            Console.WriteLine($"{playerNumberWord} player's turn.");
+            Console.WriteLine("Type 'move X Y' to move");
+            Console.WriteLine("Type 'wall X Y' to place wall");
         }
 
-        public void OnFieldUpdated(Game game)
+        private void OnGameStarted(object? sender, GameStartedEventArgs e)
         {
+            Console.WriteLine("Game has started!");
+        }
+
+        private void OnPlayerWon(object? sender, GameWonEventArgs e)
+        {
+            Console.WriteLine($"Player {e.PlayerNumber} has won!");
+            Console.WriteLine("Type 'start' to start a new game.");
+            Console.WriteLine("Type 'exit' to exit.");
+        }
+
+        public void OnFieldUpdated(object? sender, FieldUpdatedEventArgs e)
+        {
+            var action = e.Type == UpdateType.Move ? "moved to" : "placed wall at";
+            Console.WriteLine($"Player {e.PlayerNumber} has {action} ({e.X}, {e.Y})");
+            var game = sender as Game;
             var view = new GameViewModel(game);
             view.Print();
         }

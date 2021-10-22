@@ -24,6 +24,9 @@ namespace QuoridorGame.View
         FirstPlayer,
         [Display("████")]
         [Color(ConsoleColor.Blue)]
-        SecondPlayer
+        SecondPlayer,
+        [Display("████")]
+        [Color(ConsoleColor.Green)]
+        AvailableMoveCell
     }
 }

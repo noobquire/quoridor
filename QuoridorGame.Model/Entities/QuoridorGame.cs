@@ -1,18 +1,23 @@
-﻿using QuoridorGame.Model.Exceptions;
+﻿using QuoridorGame.Model.Events;
+using QuoridorGame.Model.Exceptions;
 using QuoridorGame.Model.Interfaces;
 using QuoridorGame.Model.Logic;
 using System;
+using System.Linq;
 
 namespace QuoridorGame.Model.Entities
 {
     public class QuoridorGame
     {
-        private readonly IWallPlacer wallPlacer;
+        private IWallPlacer wallPlacer;
         private readonly IMovementLogic movementLogic;
 
-        public event Action<QuoridorGame> GameStarted;
-        public event Action<QuoridorGame> FieldUpdated;
-        public event Action<Player> PlayerWon;
+        public Cell[] AvailableMoves => CurrentPlayer == null ? Array.Empty<Cell>() : movementLogic.GetAvailableMoves(CurrentPlayer.CurrentCell).ToArray();
+
+        public event EventHandler<GameStartedEventArgs> GameStarted;
+        public event EventHandler<GameWonEventArgs> GameWon;
+        public event EventHandler<FieldUpdatedEventArgs> FieldUpdated;
+        public event EventHandler<NextTurnEventArgs> NewTurn;
 
         public GameState State { get; private set; }
         public GameField GameField { get; }
@@ -50,12 +55,13 @@ namespace QuoridorGame.Model.Entities
             if (player == FirstPlayer)
             {
                 State = GameState.FirstPlayerWin;
+                GameWon?.Invoke(this, new GameWonEventArgs(1));
             }
             if (player == SecondPlayer)
             {
                 State = GameState.SecondPlayerWin;
+                GameWon?.Invoke(this, new GameWonEventArgs(2));
             }
-            PlayerWon?.Invoke(player);
         }
 
         public void NextTurn()
@@ -63,36 +69,73 @@ namespace QuoridorGame.Model.Entities
             if (State == GameState.FirstPlayerTurn)
             {
                 State = GameState.SecondPlayerTurn;
+                NewTurn?.Invoke(this, new NextTurnEventArgs(2));
             }
             else if (State == GameState.SecondPlayerTurn)
             {
                 State = GameState.FirstPlayerTurn;
+                NewTurn?.Invoke(this, new NextTurnEventArgs(1));
             }
         }
 
         public void Start()
         {
+            if (!new[]
+            {
+                GameState.FirstPlayerWin,
+                GameState.SecondPlayerWin,
+                GameState.Pregame
+            }
+            .Contains(State))
+            {
+                throw new QuoridorGameException("Cannot start, game is already in progress.");
+            }
             if (State == GameState.Pregame)
             {
                 State = GameState.FirstPlayerTurn;
+                GameStarted?.Invoke(this, new GameStartedEventArgs());
             }
-            GameStarted?.Invoke(this);
+            if (State == GameState.FirstPlayerWin || State == GameState.SecondPlayerWin)
+            {
+                // re-init game
+                var cellField = new CellField();
+                var wallsGrid = new WallsGrid();
+                GameField.Cells = cellField;
+                GameField.Walls = wallsGrid;
+                FirstPlayer.CurrentCell = GameField.Cells[0, 4];
+                SecondPlayer.CurrentCell = GameField.Cells[8, 4];
+                wallPlacer = new WallPlacer(this, new PathFinder<CellField, Cell>(GameField.Cells));
+                State = GameState.FirstPlayerTurn;
+                GameStarted?.Invoke(this, new GameStartedEventArgs(true));
+            }
+            NewTurn?.Invoke(this, new NextTurnEventArgs(1));
+            FieldUpdated?.Invoke(this, new FieldUpdatedEventArgs(UpdateType.Move, 1, 0, 4));
         }
 
         public void Move(int x, int y)
         {
+            if(State != GameState.FirstPlayerTurn && State != GameState.SecondPlayerTurn)
+            {
+                throw new QuoridorGameException("Cannot move, no game in progress.");
+            }
             if (x > 9 || x < 0 || y > 9 || y < 0)
             {
                 throw new QuoridorGameException("Index was out of bounds");
             }
             movementLogic.MovePlayer(CurrentPlayer, GameField.Cells[x, y]);
-            FieldUpdated?.Invoke(this);
+            var playerNumber = CurrentPlayer == FirstPlayer ? 1 : 2;
+            FieldUpdated?.Invoke(this, new FieldUpdatedEventArgs(UpdateType.Move, playerNumber, x, y));
         }
 
         public void SetWall(WallType wallType, int x, int y)
         {
+            if (State != GameState.FirstPlayerTurn && State != GameState.SecondPlayerTurn)
+            {
+                throw new QuoridorGameException("Cannot place wall, no game in progress.");
+            }
             wallPlacer.PlaceWall(wallType, x, y);
-            FieldUpdated?.Invoke(this);
+            var playerNumber = CurrentPlayer == FirstPlayer ? 1 : 2;
+            FieldUpdated?.Invoke(this, new FieldUpdatedEventArgs(UpdateType.Wall, playerNumber, x, y, wallType));
         }
     }
 }

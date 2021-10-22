@@ -44,6 +44,13 @@ namespace QuoridorGame.View
             ViewField[firstPlayerCell.X * 2][firstPlayerCell.Y * 2].Type = ViewCellType.FirstPlayer;
             ViewField[secondPlayerCell.X * 2][secondPlayerCell.Y * 2].Type = ViewCellType.SecondPlayer;
 
+            // highlight available moves
+            var availableMoves = game.AvailableMoves;
+            foreach(var cell in availableMoves)
+            {
+                ViewField[cell.X * 2][cell.Y * 2].Type = ViewCellType.AvailableMoveCell;
+            }
+
             // fill walls
             for (int viewI = 1, wallI = 0; wallI < WallsGrid.GridSize; viewI += 2, wallI++)
             {
