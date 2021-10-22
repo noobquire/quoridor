@@ -204,17 +204,18 @@ namespace QuoridorGame.Model.Tests
         public void WallIsNotPlaceable_PathDoesntExists2_Player1(int x, int y)
         {
             game.FirstPlayer.CurrentCell = game.GameField.Cells[x, y];
-            wallPlacer.PlaceWall(WallType.Horizontal, 0, 0);
-            wallPlacer.PlaceWall(WallType.Vertical, 1, 0);
-            wallPlacer.PlaceWall(WallType.Vertical, 1, 1);
-            wallPlacer.PlaceWall(WallType.Vertical, 3, 0);
-            wallPlacer.PlaceWall(WallType.Vertical, 3, 1);
-            wallPlacer.PlaceWall(WallType.Vertical, 5, 0);
-            wallPlacer.PlaceWall(WallType.Vertical, 5, 1);
-            wallPlacer.PlaceWall(WallType.Vertical, 7, 0);
+            wallPlacer.PlaceWall(WallType.Vertical, 0, 0);
+            wallPlacer.PlaceWall(WallType.Vertical, 0, 1);
+            wallPlacer.PlaceWall(WallType.Vertical, 2, 0);
+            wallPlacer.PlaceWall(WallType.Vertical, 2, 1);
+
+            wallPlacer.PlaceWall(WallType.Vertical, 4, 0);
+            wallPlacer.PlaceWall(WallType.Vertical, 4, 1);
+            wallPlacer.PlaceWall(WallType.Vertical, 6, 0);
+            wallPlacer.PlaceWall(WallType.Vertical, 6, 1);
 
             QuoridorGameException ex = Assert.Throws<QuoridorGameException>(
-                () => wallPlacer.PlaceWall(WallType.Vertical, 7, 1)
+                () => wallPlacer.PlaceWall(WallType.Horizontal, 7, 0)
             );
             Assert.That(ex.Message, Is.EqualTo("Can't block player with a wall."));
         }
