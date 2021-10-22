@@ -100,7 +100,7 @@ namespace QuoridorGame.Model.Logic
 
             for (int n = 0; n < CellField.FieldSize; n++)
             {
-                if (pathfinder.PathExists(firstPlayerCell, game.GameField.Cells[0, n]))
+                if (pathfinder.PathExists(secondPlayerCell, game.GameField.Cells[0, n]))
                 {
                     firstPlayerReachable = true;
                     break;
@@ -109,7 +109,7 @@ namespace QuoridorGame.Model.Logic
 
             for (int n = 0; n < CellField.FieldSize; n++)
             {
-                if (pathfinder.PathExists(secondPlayerCell, game.GameField.Cells[CellField.FieldSize - 1, n]))
+                if (pathfinder.PathExists(firstPlayerCell, game.GameField.Cells[CellField.FieldSize - 1, n]))
                 {
                     secondPlayerReachable = true;
                     break;

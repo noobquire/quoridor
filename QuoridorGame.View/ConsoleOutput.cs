@@ -19,7 +19,7 @@ namespace QuoridorGame.View
             var playerNumberWord = e.PlayerNumber == 1 ? "First" : "Second";
             Console.WriteLine($"{playerNumberWord} player's turn.");
             Console.WriteLine("Type 'move X Y' to move");
-            Console.WriteLine("Type 'wall X Y' to place wall");
+            Console.WriteLine("Type 'wall X Y wallType' to place wall (walltype 1 for vertical, 2 for horizontal)");
         }
 
         private void OnGameStarted(object? sender, GameStartedEventArgs e)
