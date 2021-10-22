@@ -38,6 +38,9 @@ namespace QuoridorGame.Controller
                             var wallType = (WallType)Enum.Parse(typeof(WallType), splitCommand[3]);
                             game.SetWall(wallType, wallX, wallyY);
                             break;
+                        default:
+                            Console.WriteLine("Unknown command");
+                            break;
                     }
                 }
                 catch (QuoridorGameException ex)
