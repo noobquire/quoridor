@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using System.Linq;
 using QuoridorGame.Model.Entities;
 using QuoridorGame.Model.Exceptions;
 using QuoridorGame.Model.Logic;
@@ -20,6 +19,7 @@ namespace QuoridorGame.Model.Tests
             game = new Game();
             wallPlacer = new WallPlacer(game, new PathFinder<CellField, Cell>(game.GameField.Cells));
             grid = game.GameField.Walls;
+            game.Start();
         }
 
 
