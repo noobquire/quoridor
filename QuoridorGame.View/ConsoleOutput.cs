@@ -10,8 +10,17 @@ namespace QuoridorGame.View
         {
             game.GameWon += OnPlayerWon;
             game.GameStarted += OnGameStarted;
-            game.FieldUpdated += OnFieldUpdated;
+            game.PlayerMoved += OnPlayerMoved;
+            game.WallPlaced += OnWallPlaced;
             game.NewTurn += OnNewTurn;
+        }
+
+        private void OnWallPlaced(object? sender, WallPlacedEventArgs e)
+        {
+            Console.WriteLine($"Player {e.PlayerNumber} has placed {e.WallType.ToString().ToLowerInvariant()} wall ({e.X}, {e.Y})");
+            Console.WriteLine($"Player {e.PlayerNumber} has {e.WallsLeft} walls remaining.");
+            var game = sender as Game;
+            UpdateView(game);
         }
 
         private void OnNewTurn(object? sender, NextTurnEventArgs e)
@@ -34,13 +43,17 @@ namespace QuoridorGame.View
             Console.WriteLine("Type 'exit' to exit.");
         }
 
-        public void OnFieldUpdated(object? sender, FieldUpdatedEventArgs e)
+        private void UpdateView(Game game)
         {
-            var action = e.Type == UpdateType.Move ? "moved to" : "placed wall at";
-            Console.WriteLine($"Player {e.PlayerNumber} has {action} ({e.X}, {e.Y})");
-            var game = sender as Game;
             var view = new GameViewModel(game);
             view.Print();
+        }
+
+        private void OnPlayerMoved(object? sender, PlayerMovedEventArgs e)
+        {
+            Console.WriteLine($"Player {e.PlayerNumber} has moved to ({e.X}, {e.Y})");
+            var game = sender as Game;
+            UpdateView(game);
         }
     }
 }

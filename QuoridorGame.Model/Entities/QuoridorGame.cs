@@ -16,13 +16,14 @@ namespace QuoridorGame.Model.Entities
 
         public event EventHandler<GameStartedEventArgs> GameStarted;
         public event EventHandler<GameWonEventArgs> GameWon;
-        public event EventHandler<FieldUpdatedEventArgs> FieldUpdated;
+        public event EventHandler<WallPlacedEventArgs> WallPlaced;
+        public event EventHandler<PlayerMovedEventArgs> PlayerMoved;
         public event EventHandler<NextTurnEventArgs> NewTurn;
 
         public GameState State { get; private set; }
         public GameField GameField { get; }
-        public Player FirstPlayer { get; }
-        public Player SecondPlayer { get; }
+        public Player FirstPlayer { get; private set; }
+        public Player SecondPlayer { get; private set; }
 
         public Player CurrentPlayer => State switch
         {
@@ -102,14 +103,14 @@ namespace QuoridorGame.Model.Entities
                 var wallsGrid = new WallsGrid();
                 GameField.Cells = cellField;
                 GameField.Walls = wallsGrid;
-                FirstPlayer.CurrentCell = GameField.Cells[0, 4];
-                SecondPlayer.CurrentCell = GameField.Cells[8, 4];
+                FirstPlayer = new Player(GameField.Cells[0, 4]);
+                SecondPlayer = new Player(GameField.Cells[8, 4]);
                 wallPlacer = new WallPlacer(this, new PathFinder<CellField, Cell>(GameField.Cells));
                 State = GameState.FirstPlayerTurn;
                 GameStarted?.Invoke(this, new GameStartedEventArgs(true));
             }
             NewTurn?.Invoke(this, new NextTurnEventArgs(1));
-            FieldUpdated?.Invoke(this, new FieldUpdatedEventArgs(UpdateType.Move, 1, 0, 4));
+            PlayerMoved?.Invoke(this, new PlayerMovedEventArgs(1, 0, 4));
         }
 
         public void Move(int x, int y)
@@ -124,18 +125,22 @@ namespace QuoridorGame.Model.Entities
             }
             movementLogic.MovePlayer(CurrentPlayer, GameField.Cells[x, y]);
             var playerNumber = CurrentPlayer == FirstPlayer ? 1 : 2;
-            FieldUpdated?.Invoke(this, new FieldUpdatedEventArgs(UpdateType.Move, playerNumber, x, y));
+            PlayerMoved?.Invoke(this, new PlayerMovedEventArgs(playerNumber, x, y));
         }
 
         public void SetWall(WallType wallType, int x, int y)
         {
+            if(!Enum.IsDefined(typeof(WallType), wallType))
+            {
+                throw new QuoridorGameException($"Cannot place wall of unknown type {wallType}");
+            }
             if (State != GameState.FirstPlayerTurn && State != GameState.SecondPlayerTurn)
             {
                 throw new QuoridorGameException("Cannot place wall, no game in progress.");
             }
             wallPlacer.PlaceWall(wallType, x, y);
             var playerNumber = CurrentPlayer == FirstPlayer ? 1 : 2;
-            FieldUpdated?.Invoke(this, new FieldUpdatedEventArgs(UpdateType.Wall, playerNumber, x, y, wallType));
+            WallPlaced?.Invoke(this, new WallPlacedEventArgs(wallType, x, y, OpponentPlayer.WallsCount, playerNumber));
         }
     }
 }

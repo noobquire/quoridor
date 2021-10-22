@@ -48,7 +48,7 @@ namespace QuoridorGame.Controller
                 {
                     Console.WriteLine("Invalid number of arguments");
                 }
-                catch (FormatException)
+                catch (Exception ex) when (ex is FormatException || ex is ArgumentException)
                 {
                     Console.WriteLine("Invalid input");
                 }
