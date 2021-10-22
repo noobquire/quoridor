@@ -8,7 +8,7 @@ namespace QuoridorGame.Model.Logic
     public class WallPlacer : IWallPlacer
     {
         private readonly Game game;
-        private readonly IPathFinder<CellField, Cell> pathfinder;
+        private IPathFinder<CellField, Cell> pathfinder;
         public WallPlacer(Game game, IPathFinder<CellField, Cell> pathfinder)
         {
             this.game = game;
@@ -124,6 +124,9 @@ namespace QuoridorGame.Model.Logic
             {
                 game.GameField.Walls[x, y].Type = WallType.None;
                 game.GameField.Cells.Restore(prevCells);
+                game.FirstPlayer.CurrentCell = game.GameField.Cells[game.FirstPlayer.CurrentCell.X, game.FirstPlayer.CurrentCell.Y];
+                game.SecondPlayer.CurrentCell = game.GameField.Cells[game.SecondPlayer.CurrentCell.X, game.SecondPlayer.CurrentCell.Y];
+                pathfinder = new PathFinder<CellField, Cell>(game.GameField.Cells);
                 return false;
             }
         }

@@ -9,7 +9,7 @@ namespace QuoridorGame.Model.Entities
 {
     public class QuoridorGame
     {
-        private IWallPlacer wallPlacer;
+        internal IWallPlacer wallPlacer;
         private readonly IMovementLogic movementLogic;
 
         public Cell[] AvailableMoves => CurrentPlayer == null ? Array.Empty<Cell>() : movementLogic.GetAvailableMoves(CurrentPlayer.CurrentCell).ToArray();
