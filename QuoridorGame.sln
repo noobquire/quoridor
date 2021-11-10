@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuoridorGame.Controller", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuoridorGame.View.ConsoleGraphics", "QuoridorGame.View\QuoridorGame.View.ConsoleGraphics.csproj", "{CC9D1B0A-1550-46B0-8E3F-68E41ABB8511}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuoridorGame.View.Bot", "QuoridorGame.View.Bot\QuoridorGame.View.Bot.csproj", "{2051DD06-6EDC-4B92-ADBB-BA1A007E8D93}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,10 @@ Global
 		{CC9D1B0A-1550-46B0-8E3F-68E41ABB8511}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC9D1B0A-1550-46B0-8E3F-68E41ABB8511}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC9D1B0A-1550-46B0-8E3F-68E41ABB8511}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2051DD06-6EDC-4B92-ADBB-BA1A007E8D93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2051DD06-6EDC-4B92-ADBB-BA1A007E8D93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2051DD06-6EDC-4B92-ADBB-BA1A007E8D93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2051DD06-6EDC-4B92-ADBB-BA1A007E8D93}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -53,6 +59,7 @@ Global
 		{BA768BD4-F33F-41E7-8043-707A6ADDC2F6} = {71990A5B-2942-4B32-82DD-364C746A4182}
 		{8256F395-C0FE-4ED5-B830-E230D202C26A} = {F6C804BB-9F27-4339-9440-B07EEA71D6FA}
 		{CC9D1B0A-1550-46B0-8E3F-68E41ABB8511} = {F6C804BB-9F27-4339-9440-B07EEA71D6FA}
+		{2051DD06-6EDC-4B92-ADBB-BA1A007E8D93} = {F6C804BB-9F27-4339-9440-B07EEA71D6FA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CBB944DC-B9DC-4D9A-9C58-AE669E3EBE71}

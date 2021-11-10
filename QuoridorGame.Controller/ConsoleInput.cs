@@ -1,5 +1,6 @@
 ﻿using QuoridorGame.Model.Entities;
 using QuoridorGame.Model.Exceptions;
+using QuoridorGame.View.Bot;
 using System;
 using Game = QuoridorGame.Model.Entities.QuoridorGame;
 
@@ -7,12 +8,18 @@ namespace QuoridorGame.Controller
 {
     public class ConsoleInput
     {
+        private readonly IBot bot;
+
+        public ConsoleInput(IBot bot)
+        {
+            this.bot = bot;
+        }
+
         public void StartProcessing(Game game)
         {
             string command;
             while (true)
             {
-                Console.WriteLine();
                 command = Console.ReadLine();
                 var splitCommand = command.Split(Array.Empty<char>());
                 try
@@ -20,13 +27,13 @@ namespace QuoridorGame.Controller
                     switch (splitCommand[0].ToLower())
                     {
                         case "black":
-                            // start as player 1, our bot plays as 2
-                            //bot.ChoosePlayer(Player.White);
+                            // start as player 2, our bot plays as 1
+                            bot.ChoosePlayer(1);
                             game.Start();
                             break;
                         case "white":
-                            // start as player 2, our bot plays as 1
-                            //bot.ChoosePlayer(Player.White);
+                            // start as player 1, our bot plays as 2
+                            bot.ChoosePlayer(2);
                             game.Start();
                             break;
                         case "jump":

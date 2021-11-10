@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\QuoridorGame.Controller\QuoridorGame.Controller.csproj" />
     <ProjectReference Include="..\QuoridorGame.Model\QuoridorGame.Model.csproj" />
+    <ProjectReference Include="..\QuoridorGame.View.Bot\QuoridorGame.View.Bot.csproj" />
     <ProjectReference Include="..\QuoridorGame.View\QuoridorGame.View.ConsoleGraphics.csproj" />
   </ItemGroup>
 

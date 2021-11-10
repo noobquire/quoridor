@@ -122,7 +122,7 @@ namespace QuoridorGame.Model.Entities
             if (x > 9 || x < 0 || y > 9 || y < 0)
             {
                 throw new QuoridorGameException("Index was out of bounds");
-            }
+            } 
             movementLogic.MovePlayer(CurrentPlayer, GameField.Cells[x, y]);
             var playerNumber = CurrentPlayer == FirstPlayer ? 1 : 2;
             PlayerMoved?.Invoke(this, new PlayerMovedEventArgs(playerNumber, x, y));
