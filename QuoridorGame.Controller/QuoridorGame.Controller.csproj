@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\QuoridorGame.Model\QuoridorGame.Model.csproj" />
+    <ProjectReference Include="..\QuoridorGame.View.Bot\QuoridorGame.View.Bot.csproj" />
   </ItemGroup>
 
 </Project>

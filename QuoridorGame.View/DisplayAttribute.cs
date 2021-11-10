@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace QuoridorGame.View
+namespace QuoridorGame.View.ConsoleGraphics
 {
     internal class DisplayAttribute : Attribute
     {

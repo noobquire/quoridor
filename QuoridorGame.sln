@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30907.101
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31825.309
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuoridorGame", "QuoridorGame\QuoridorGame.csproj", "{BBB5C950-6306-4E12-A2A2-65A3AB70C44A}"
 EndProject
@@ -15,7 +15,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{71990A5B-2
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuoridorGame.Controller", "QuoridorGame.Controller\QuoridorGame.Controller.csproj", "{8256F395-C0FE-4ED5-B830-E230D202C26A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuoridorGame.View", "QuoridorGame.View\QuoridorGame.View.csproj", "{CC9D1B0A-1550-46B0-8E3F-68E41ABB8511}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuoridorGame.View.ConsoleGraphics", "QuoridorGame.View\QuoridorGame.View.ConsoleGraphics.csproj", "{CC9D1B0A-1550-46B0-8E3F-68E41ABB8511}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuoridorGame.View.Bot", "QuoridorGame.View.Bot\QuoridorGame.View.Bot.csproj", "{2051DD06-6EDC-4B92-ADBB-BA1A007E8D93}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,6 +45,10 @@ Global
 		{CC9D1B0A-1550-46B0-8E3F-68E41ABB8511}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC9D1B0A-1550-46B0-8E3F-68E41ABB8511}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC9D1B0A-1550-46B0-8E3F-68E41ABB8511}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2051DD06-6EDC-4B92-ADBB-BA1A007E8D93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2051DD06-6EDC-4B92-ADBB-BA1A007E8D93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2051DD06-6EDC-4B92-ADBB-BA1A007E8D93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2051DD06-6EDC-4B92-ADBB-BA1A007E8D93}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -53,6 +59,7 @@ Global
 		{BA768BD4-F33F-41E7-8043-707A6ADDC2F6} = {71990A5B-2942-4B32-82DD-364C746A4182}
 		{8256F395-C0FE-4ED5-B830-E230D202C26A} = {F6C804BB-9F27-4339-9440-B07EEA71D6FA}
 		{CC9D1B0A-1550-46B0-8E3F-68E41ABB8511} = {F6C804BB-9F27-4339-9440-B07EEA71D6FA}
+		{2051DD06-6EDC-4B92-ADBB-BA1A007E8D93} = {F6C804BB-9F27-4339-9440-B07EEA71D6FA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CBB944DC-B9DC-4D9A-9C58-AE669E3EBE71}

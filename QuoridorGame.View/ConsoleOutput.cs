@@ -2,7 +2,7 @@ using QuoridorGame.Model.Events;
 using System;
 using Game = QuoridorGame.Model.Entities.QuoridorGame;
 
-namespace QuoridorGame.View
+namespace QuoridorGame.View.ConsoleGraphics
 {
     public class ConsoleOutput
     {

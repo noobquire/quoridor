@@ -17,6 +17,7 @@ namespace QuoridorGame.Model.Tests
         {
             var game = new Game();
             game.Start();
+            game.NextTurn();
             this.game = game;
             movementLogic = new MovementLogic(game);
         }

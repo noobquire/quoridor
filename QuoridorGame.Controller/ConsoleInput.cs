@@ -1,42 +1,49 @@
 ﻿using QuoridorGame.Model.Entities;
 using QuoridorGame.Model.Exceptions;
+using QuoridorGame.View.Bot;
 using System;
-using System.Linq;
 using Game = QuoridorGame.Model.Entities.QuoridorGame;
 
 namespace QuoridorGame.Controller
 {
     public class ConsoleInput
     {
+        private readonly IBot bot;
+
+        public ConsoleInput(IBot bot)
+        {
+            this.bot = bot;
+        }
+
         public void StartProcessing(Game game)
         {
             string command;
-            Console.WriteLine("Welcome to quoridor game!");
-            Console.WriteLine("Type 'start' to start a new game.");
             while (true)
             {
-                Console.WriteLine();
                 command = Console.ReadLine();
                 var splitCommand = command.Split(Array.Empty<char>());
                 try
                 {
                     switch (splitCommand[0].ToLower())
                     {
-                        case "start":
+                        case "black":
+                            // start as player 2, our bot plays as 1
+                            bot.ChoosePlayer(1);
                             game.Start();
                             break;
-                        case "exit":
-                            return;
+                        case "white":
+                            // start as player 1, our bot plays as 2
+                            bot.ChoosePlayer(2);
+                            game.Start();
+                            break;
+                        case "jump":
                         case "move":
-                            var moveX = int.Parse(splitCommand[1]);
-                            var moveY = int.Parse(splitCommand[2]);
-                            game.Move(moveX, moveY);
+                            var jumpCoords = ParseJumpCoordinates(splitCommand[1]);
+                            game.Move(jumpCoords.x, jumpCoords.y);
                             break;
                         case "wall":
-                            var wallX = int.Parse(splitCommand[1]);
-                            var wallyY = int.Parse(splitCommand[2]);
-                            var wallType = (WallType)Enum.Parse(typeof(WallType), splitCommand[3]);
-                            game.SetWall(wallType, wallX, wallyY);
+                            var wallCoords = ParseWallCoordinates(splitCommand[1]);
+                            game.SetWall(wallCoords.wallType, wallCoords.x, wallCoords.y);
                             break;
                         default:
                             Console.WriteLine("Unknown command");
@@ -56,6 +63,48 @@ namespace QuoridorGame.Controller
                     Console.WriteLine("Invalid input");
                 }
             }
+        }
+        
+        public (int x, int y) ParseJumpCoordinates(string jumpCoordinates)
+        {
+            char horizontalChar = jumpCoordinates[0];
+            if(horizontalChar < 'A' || horizontalChar > 'I')
+            {
+                throw new QuoridorGameException("Invalid coordinate");
+            }
+            char verticalChar = jumpCoordinates[1];
+            if(verticalChar < '1' || verticalChar > '9')
+            {
+                throw new QuoridorGameException("Invalid coordinate");
+            }
+
+            int y = horizontalChar - 'A';
+            int x = verticalChar - '1';
+            return (x, y);
+        }
+
+        public (int x, int y, WallType wallType) ParseWallCoordinates(string wallCoordinates)
+        {
+            char horizontalChar = wallCoordinates[0];
+            if (horizontalChar < 'S' || horizontalChar > 'Z')
+            {
+                throw new QuoridorGameException("Invalid coordinate");
+            }
+            char verticalChar = wallCoordinates[1];
+            if (verticalChar < '1' || verticalChar > '8')
+            {
+                throw new QuoridorGameException("Invalid coordinate");
+            }
+            char wallType = wallCoordinates[2];
+            if(wallType  != 'v' && wallType != 'h')
+            {
+                throw new QuoridorGameException("Invalid wall type");
+            }
+
+            int y = horizontalChar - 'S';
+            int x = verticalChar - '1';
+            var type = wallType == 'v' ? WallType.Vertical : WallType.Horizontal;
+            return (x, y, type);
         }
     }
 }

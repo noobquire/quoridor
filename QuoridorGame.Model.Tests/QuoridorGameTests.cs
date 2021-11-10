@@ -24,18 +24,17 @@ namespace QuoridorGame.Model.Tests
         }
 
         [Test]
-        public void Start_ChangesGameState_ToFirstPlayerTurn()
+        public void Start_ChangesGameState_ToSecondPlayerTurn()
         {
             Assert.AreEqual(GameState.Pregame, game.State);
             game.Start();
-            Assert.AreEqual(GameState.FirstPlayerTurn, game.State);
+            Assert.AreEqual(GameState.SecondPlayerTurn, game.State);
         }
 
         [Test]
         public void NextTurn_PassesTurnToAnotherPlayer()
         {
             game.Start();
-            game.NextTurn();
             Assert.AreEqual(GameState.SecondPlayerTurn, game.State);
             game.NextTurn();
             Assert.AreEqual(GameState.FirstPlayerTurn, game.State);
@@ -60,7 +59,6 @@ namespace QuoridorGame.Model.Tests
         public void CurrentPlayer_ShouldBeAppropriatePlayer_IfPlayersTurn()
         {
             game.Start();
-            game.NextTurn();
             var currentPlayer = game.CurrentPlayer;
             var expectedPlayer = game.SecondPlayer;
             Assert.AreEqual(expectedPlayer, currentPlayer);
@@ -77,7 +75,6 @@ namespace QuoridorGame.Model.Tests
         public void OpponentPlayer_ShouldBeAppropriatePlayer_IfPlayersTurn()
         {
             game.Start();
-            game.NextTurn();
             var opponentPlayer = game.OpponentPlayer;
             var expectedPlayer = game.FirstPlayer;
             Assert.AreEqual(expectedPlayer, opponentPlayer);
