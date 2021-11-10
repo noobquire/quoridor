@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Game = QuoridorGame.Model.Entities.QuoridorGame;
 
-namespace QuoridorGame.View
+namespace QuoridorGame.View.ConsoleGraphics
 {
     public class GameViewModel
     {

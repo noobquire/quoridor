@@ -4,6 +4,7 @@ using QuoridorGame.Model.Entities;
 using QuoridorGame.Model.Interfaces;
 using QuoridorGame.Model.Logic;
 using QuoridorGame.View;
+using QuoridorGame.View.ConsoleGraphics;
 using Game = QuoridorGame.Model.Entities.QuoridorGame;
 
 namespace QuoridorGame
@@ -17,6 +18,7 @@ namespace QuoridorGame
             serviceCollection.AddSingleton(game)
                              .AddScoped<IGraph<Cell>>(c => game.GameField.Cells);
             ConfigureServices(serviceCollection);
+            // TODO: Create BotOutput which plays the game
             var output = new ConsoleOutput();
             output.ListenTo(game);
             var input = new ConsoleInput();

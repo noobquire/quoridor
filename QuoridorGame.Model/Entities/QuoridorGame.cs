@@ -91,9 +91,10 @@ namespace QuoridorGame.Model.Entities
             {
                 throw new QuoridorGameException("Cannot start, game is already in progress.");
             }
+
             if (State == GameState.Pregame)
             {
-                State = GameState.FirstPlayerTurn;
+                State = GameState.SecondPlayerTurn;
                 GameStarted?.Invoke(this, new GameStartedEventArgs());
             }
             if (State == GameState.FirstPlayerWin || State == GameState.SecondPlayerWin)
@@ -109,8 +110,7 @@ namespace QuoridorGame.Model.Entities
                 State = GameState.FirstPlayerTurn;
                 GameStarted?.Invoke(this, new GameStartedEventArgs(true));
             }
-            NewTurn?.Invoke(this, new NextTurnEventArgs(1));
-            PlayerMoved?.Invoke(this, new PlayerMovedEventArgs(1, 0, 4));
+            NewTurn?.Invoke(this, new NextTurnEventArgs(2));
         }
 
         public void Move(int x, int y)

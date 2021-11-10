@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reflection;
 
-namespace QuoridorGame.View
+namespace QuoridorGame.View.ConsoleGraphics
 {
     public static class EnumExtensions
     {
