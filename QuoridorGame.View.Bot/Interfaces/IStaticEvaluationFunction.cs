@@ -5,6 +5,6 @@ namespace QuoridorGame.View.Bot.Interfaces
 {
     interface IStaticEvaluationFunction
     {
-        public float Eval(Game game, Player evalplayer);
+        public float Eval(Game game);
     }
 }

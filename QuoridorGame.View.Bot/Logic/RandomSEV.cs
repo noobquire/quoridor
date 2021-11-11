@@ -7,7 +7,7 @@ namespace QuoridorGame.View.Bot.Logic
 {
     class RandomSEV : IStaticEvaluationFunction
     {
-        public float Eval(Game game, Player evalplayer) {
+        public float Eval(Game game) {
             Random rand = new Random();
             return (float)rand.NextDouble();
         }
