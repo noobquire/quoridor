@@ -4,6 +4,6 @@
     {
         void ChoosePlayer(int playerNumber);
         int PlayerNumber { get; }
-        void MakeMove(Model.Entities.QuoridorGame game);
+        void MakeTurn(Model.Entities.QuoridorGame game);
     }
 }
