@@ -17,14 +17,26 @@ namespace QuoridorGame.View.Bot
 
         public void ListenTo(Game game)
         {
-            /* These handlers were used mainly for graphics
-            game.GameWon += OnPlayerWon;
-            game.GameStarted += OnGameStarted;
             game.WallPlaced += OnWallPlaced;
-            */
-
             game.PlayerMoved += OnPlayerMoved;
             game.NewTurn += OnNewTurn;
+        }
+
+        private void OnWallPlaced(object sender, WallPlacedEventArgs e)
+        {
+            // Do not handle if it was other player's turn
+            if (e.PlayerNumber != bot.PlayerNumber)
+            {
+                return;
+            }
+
+            var x = (e.X + 1).ToString();
+            var y = (char)(e.Y + 'S');
+            var type = e.WallType == Model.Entities.WallType.Vertical ? 'v' : 'h';
+
+            var message = $"wall {y}{x}{type}";
+
+            Console.WriteLine(message);
         }
 
         private void OnPlayerMoved(object sender, PlayerMovedEventArgs e)
@@ -34,8 +46,14 @@ namespace QuoridorGame.View.Bot
             {
                 return;
             }
-            // TODO: Log own turns to console
-            throw new NotImplementedException();
+
+            var x = (e.X + 1).ToString();
+            var y = (char)(e.Y + 'A');
+
+            // TODO: decide move or jump
+            var message = $"move {y}{x}";
+
+            Console.WriteLine(message);
         }
 
         private void OnNewTurn(object sender, NextTurnEventArgs e)
@@ -45,8 +63,8 @@ namespace QuoridorGame.View.Bot
             {
                 return;
             }
-            // TODO: Process game state and make turn
-            throw new NotImplementedException();
+
+            bot.MakeTurn(game);
         }
     }
 }

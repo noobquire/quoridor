@@ -12,8 +12,9 @@ namespace QuoridorGame.View.Bot
             this.PlayerNumber = playerNumber;
         }
 
-        public void MakeMove(Game game)
+        public void MakeTurn(Game game)
         {
+            // TODO: Process game state and make turn
             throw new NotImplementedException();
         }
     }
