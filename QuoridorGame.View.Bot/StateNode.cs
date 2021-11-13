@@ -15,7 +15,7 @@ namespace QuoridorGame.View.Bot
         //public StateNode[] nextStates;
         public double[] nextScores;
         public double SEVScore;
-        public readonly int bestMove;
+        public int bestMove;
 
         public StateNode(Game game, IStaticEvaluationFunction SEV, 
             int actionSpaceDim, int actionNum = -1) 
@@ -138,10 +138,8 @@ namespace QuoridorGame.View.Bot
                         var nextState = new StateNode(game, SEV, actionSpaceDim, i);
                         nextScores[i] = sign * nextState.Rollout(NRollouts - 1);
                     }
-                    double maxScore = nextScores.Max(); 
-                    int bestMove = Array.IndexOf(nextScores, maxScore);
-                    //сделать масив таплов (скор, номер мува) и возвращать не просто макс по скорам
-                    //а тапла (макс_скор, номер хода)
+                    double maxScore = nextScores.Max();
+                    bestMove = Array.IndexOf(nextScores, maxScore);
                 }
                 else if (NRollouts == 0)
                 {
