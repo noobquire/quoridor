@@ -2,6 +2,6 @@
 {
     interface IStateNode
     {
-    public double BuildNode(int NRollouts);
+    public double Rollout(int NRollouts);
     }
 }
