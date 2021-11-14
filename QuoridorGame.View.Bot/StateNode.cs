@@ -4,6 +4,8 @@ using QuoridorGame.Model.Entities;
 using QuoridorGame.Model.Exceptions;
 using System;
 using System.Linq;
+using QuoridorGame.Model;
+
 namespace QuoridorGame.View.Bot
 {
     class StateNode : IStateNode
@@ -12,19 +14,23 @@ namespace QuoridorGame.View.Bot
         private IStaticEvaluationFunction SEV;
         private int actionSpaceDim;
         private int actionNum;
-        //public StateNode[] nextStates;
         public double[] nextScores;
         public double SEVScore;
         public int bestMove;
 
-        public StateNode(Game game, IStaticEvaluationFunction SEV, 
-            int actionSpaceDim, int actionNum = -1) 
+        public StateNode(Game game, IStaticEvaluationFunction SEV,
+            int actionSpaceDim, int actionNum = -1)
         {
-            this.game = game;
+            this.game = game.DeepClone();
             this.SEV = SEV;
             this.actionSpaceDim = actionSpaceDim;
             this.actionNum = actionNum;//-1 for STRT_NODE
-            
+
+        }
+
+        public void MakeBestMove() 
+        {
+            MakeActionIFLegal(bestMove);
         }
         private bool MakeActionIFLegal(int actionNum) 
         {
@@ -110,11 +116,6 @@ namespace QuoridorGame.View.Bot
             return true;
         }
 
-        private void RollbackAction(int actionNum) 
-        {
-            //rollback action
-        }
-
         public double Rollout(int NRollouts)
         {
             //NRollouts should be odd to start with max search
@@ -143,7 +144,6 @@ namespace QuoridorGame.View.Bot
                     SEVScore = SEV.Eval(game);
                 }
 
-                this.RollbackAction(actionNum);
             }
             return SEVScore;
         }

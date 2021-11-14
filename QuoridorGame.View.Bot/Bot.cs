@@ -2,6 +2,7 @@
 using QuoridorGame.View.Bot.Logic;
 using QuoridorGame.View.Bot;
 using System;
+using QuoridorGame.Model;
 
 namespace QuoridorGame.View.Bot
 {
@@ -17,6 +18,7 @@ namespace QuoridorGame.View.Bot
 
         public void MakeTurn(Game game)
         {
+            //var gameCopy = game.DeepClone();
             var SEV = new RandomSEV();
             int actionSpaceDim = 140;
             var tree = new StateNode(game, SEV, actionSpaceDim);
