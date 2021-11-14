@@ -22,8 +22,10 @@ namespace QuoridorGame.Controller
             {
                 command = Console.ReadLine();
                 var splitCommand = command.Split(Array.Empty<char>());
+                /*
                 try
                 {
+                */
                     switch (splitCommand[0].ToLower())
                     {
                         case "black":
@@ -49,7 +51,8 @@ namespace QuoridorGame.Controller
                             Console.WriteLine("Unknown command");
                             break;
                     }
-                }
+                    /*
+                }               
                 catch (QuoridorGameException ex)
                 {
                     Console.WriteLine(ex.Message);
@@ -62,6 +65,7 @@ namespace QuoridorGame.Controller
                 {
                     Console.WriteLine("Invalid input");
                 }
+                */
             }
         }
         
