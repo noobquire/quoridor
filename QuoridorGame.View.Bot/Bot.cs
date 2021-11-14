@@ -23,7 +23,7 @@ namespace QuoridorGame.View.Bot
             int actionSpaceDim = 140;
             var tree = new StateNode(game, SEV, actionSpaceDim);
             tree.Rollout(3);
-            tree.MakeBestMove();
+            tree.MakeBestMove(true);
         }
     }
 }

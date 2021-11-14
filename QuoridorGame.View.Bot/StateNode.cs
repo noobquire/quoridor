@@ -28,17 +28,20 @@ namespace QuoridorGame.View.Bot
 
         }
 
-        public void MakeBestMove() 
+        public void MakeBestMove(bool verbose = false)
         {
-            MakeActionIFLegal(bestMove);
+            MakeActionIFLegal(bestMove, true);
         }
-        private bool MakeActionIFLegal(int actionNum) 
+        private bool MakeActionIFLegal(int actionNum, bool verbose = false) 
         {
             //make action if allowed
 
             if (actionNum == -1)
             {
-                //pass 
+                if (verbose) 
+                {
+                    Console.WriteLine("Pass");
+                }
             }
             else if (actionNum < 12)
             {
@@ -90,6 +93,11 @@ namespace QuoridorGame.View.Bot
                 try
                 {
                     game.Move(X, Y);
+                    if (verbose)
+                    { 
+                        Console.WriteLine($"Move to {X}, {Y}");
+                    }
+                    
                 }
                 catch (QuoridorGameException)
                 {
@@ -102,6 +110,11 @@ namespace QuoridorGame.View.Bot
                 try
                 {
                     game.SetWall(walltype, actionNum / 8, actionNum % 8);
+                    if (verbose)
+                    {
+                        var wall = walltype is WallType.Horizontal ? "horizonta" : "vertical";
+                        Console.WriteLine($"Place {wall} wall to {actionNum / 8}, {actionNum % 8}");
+                    }
                 }
                 catch (QuoridorGameException)
                 {
