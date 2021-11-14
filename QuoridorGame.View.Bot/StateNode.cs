@@ -101,9 +101,6 @@ namespace QuoridorGame.View.Bot
                 {
                     return false;
                 }
-
-
-
             }
             else
             {
