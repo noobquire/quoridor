@@ -1,4 +1,5 @@
 ﻿using QuoridorGame.Model.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,6 +11,7 @@ namespace QuoridorGame.Model.Logic
     /// </summary>
     /// <typeparam name="TGraph">Type of graph to traverse.</typeparam>
     /// <typeparam name="TNode">Type of graph nodes.</typeparam>
+    [Serializable]
     public class PathFinder<TGraph, TNode> : IPathFinder<TGraph, TNode>
         where TGraph : IGraph<TNode>
         where TNode : IGraphNode<TNode>

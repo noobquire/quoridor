@@ -1,5 +1,8 @@
+using System;
+
 namespace QuoridorGame.Model.Entities
 {
+    [Serializable]
     public class WallsGrid
     {
         public const int GridSize = 8;

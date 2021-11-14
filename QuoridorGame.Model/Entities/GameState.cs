@@ -1,5 +1,8 @@
-﻿namespace QuoridorGame.Model.Entities
+﻿using System;
+
+namespace QuoridorGame.Model.Entities
 {
+    [Serializable]
     public enum GameState
     {
         Pregame,

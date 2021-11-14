@@ -1,4 +1,6 @@
-﻿namespace QuoridorGame.Model.Entities
+﻿using System;
+
+namespace QuoridorGame.Model.Entities
 {
     public enum WallType
     {
@@ -7,6 +9,7 @@
         Horizontal
     }
 
+    [Serializable]
     public class Wall
     {
         public WallType Type { get; set; }

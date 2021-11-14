@@ -2,9 +2,11 @@ using QuoridorGame.Model.Interfaces;
 using QuoridorGame.Model.Exceptions;
 using QuoridorGame.Model.Entities;
 using Game = QuoridorGame.Model.Entities.QuoridorGame;
+using System;
 
 namespace QuoridorGame.Model.Logic
 {
+    [Serializable]
     public class WallPlacer : IWallPlacer
     {
         private readonly Game game;
