@@ -1,8 +1,11 @@
-using  QuoridorGame.Model.Entities;
+using QuoridorGame.Model.Entities;
+using System.Collections.Generic;
+
 namespace QuoridorGame.Model.Interfaces
 {
-    public interface IWallPlacer 
+    public interface IWallPlacer
     {
-    void PlaceWall(WallType walltype, int x, int y);
+        void PlaceWall(Wall wall, WallType wallType);
+        IEnumerable<Wall> GetAvailableWalls();
     }
 }

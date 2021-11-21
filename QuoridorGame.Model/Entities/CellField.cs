@@ -1,6 +1,7 @@
 ﻿using QuoridorGame.Model.Exceptions;
 using QuoridorGame.Model.Interfaces;
 using System;
+using System.Collections.Generic;
 
 namespace QuoridorGame.Model.Entities
 {
@@ -8,7 +9,7 @@ namespace QuoridorGame.Model.Entities
     /// Cells on game field on which players can walk.
     /// </summary>
     [Serializable]
-    public class CellField : IGraph<Cell>, IOriginator<Cell[,]>
+    public class CellField : IGraph<Cell>
     {
         public const int FieldSize = 9;
         public Cell[,] Nodes { get; private set; }
@@ -37,7 +38,7 @@ namespace QuoridorGame.Model.Entities
             for (int i = 1; i < FieldSize - 1; i++)
             {
                 // top row
-                Nodes[0, i].AdjacentNodes = new[]
+                Nodes[0, i].AdjacentNodes = new List<Cell>
                 {
                     Nodes[0, i - 1],
                     Nodes[0, i + 1],
@@ -45,7 +46,7 @@ namespace QuoridorGame.Model.Entities
                 };
 
                 // bottom row
-                Nodes[FieldSize - 1, i].AdjacentNodes = new[]
+                Nodes[FieldSize - 1, i].AdjacentNodes = new List<Cell>
                 {
                     Nodes[FieldSize - 1, i - 1],
                     Nodes[FieldSize - 1, i + 1],
@@ -53,7 +54,7 @@ namespace QuoridorGame.Model.Entities
                 };
 
                 // first column
-                Nodes[i, 0].AdjacentNodes = new[]
+                Nodes[i, 0].AdjacentNodes = new List<Cell>
                 {
                     Nodes[i - 1, 0],
                     Nodes[i + 1, 0],
@@ -61,7 +62,7 @@ namespace QuoridorGame.Model.Entities
                 };
 
                 // last column
-                Nodes[i, FieldSize - 1].AdjacentNodes = new[]
+                Nodes[i, FieldSize - 1].AdjacentNodes = new List<Cell>
                 {
                     Nodes[i - 1, FieldSize - 1],
                     Nodes[i + 1, FieldSize - 1],
@@ -79,7 +80,7 @@ namespace QuoridorGame.Model.Entities
             {
                 for (int j = 1; j < FieldSize - 1; j++)
                 {
-                    Nodes[i, j].AdjacentNodes = new[]
+                    Nodes[i, j].AdjacentNodes = new List<Cell>
                     {
                         Nodes[i, j - 1],
                         Nodes[i, j + 1],
@@ -95,41 +96,29 @@ namespace QuoridorGame.Model.Entities
         /// </summary>
         private void InitCornerCells()
         {
-            Nodes[0, 0].AdjacentNodes = new[] // top left
+            Nodes[0, 0].AdjacentNodes = new List<Cell> // top left
             {
                 Nodes[0, 1],
                 Nodes[1, 0]
             };
 
-            Nodes[0, FieldSize - 1].AdjacentNodes = new[] // top right
+            Nodes[0, FieldSize - 1].AdjacentNodes = new List<Cell> // top right
             {
                 Nodes[0, FieldSize - 2],
                 Nodes[1, FieldSize - 1]
             };
 
-            Nodes[FieldSize - 1, 0].AdjacentNodes = new[] // bottom left
+            Nodes[FieldSize - 1, 0].AdjacentNodes = new List<Cell> // bottom left
             {
                 Nodes[FieldSize - 2, 0],
                 Nodes[FieldSize - 1, 1]
             };
 
-            Nodes[FieldSize - 1, FieldSize - 1].AdjacentNodes = new[] // bottom right
+            Nodes[FieldSize - 1, FieldSize - 1].AdjacentNodes = new List<Cell> // bottom right
             {
                 Nodes[FieldSize - 2, FieldSize - 1],
                 Nodes[FieldSize - 1, FieldSize - 2]
             };
-        }
-
-        public IMemento<Cell[,]> Save()
-        {
-            var cellsCopy = Nodes.DeepClone();
-            var snashot = new CellFieldSnapshot(cellsCopy);
-            return snashot;
-        }
-
-        public void Restore(IMemento<Cell[,]> memento)
-        {
-            Nodes = memento.Data;
         }
 
         /// <summary>

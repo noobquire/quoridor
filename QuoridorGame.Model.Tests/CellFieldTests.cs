@@ -39,21 +39,5 @@ namespace QuoridorGame.Model.Tests
         {
             Assert.AreEqual(4, cellField.Nodes[i, j].AdjacentNodes.Count());
         }
-
-        [Test]
-        public void Save_ReturnsDeepCopyOfCells()
-        {
-            var savedState = cellField.Save();
-            Assert.That(savedState.Data[0, 0], Is.Not.SameAs(cellField.Nodes[0, 0]));
-        }
-
-        [Test]
-        public void Restore_RestoresCellFieldState()
-        {
-            var savedState = cellField.Save();
-            cellField.Nodes[0, 0].AdjacentNodes = Enumerable.Empty<Cell>(); // change state after save
-            cellField.Restore(savedState);
-            Assert.AreEqual(2, cellField.Nodes[0, 0].AdjacentNodes.Count());
-        }
     }
 }

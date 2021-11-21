@@ -3,6 +3,7 @@ using QuoridorGame.Model.Exceptions;
 using QuoridorGame.Model.Entities;
 using Game = QuoridorGame.Model.Entities.QuoridorGame;
 using System;
+using System.Collections.Generic;
 
 namespace QuoridorGame.Model.Logic
 {
@@ -17,34 +18,48 @@ namespace QuoridorGame.Model.Logic
             this.pathfinder = pathfinder;
         }
 
-        public void PlaceWall(WallType walltype, int x, int y)
+        public void PlaceWall(Wall wall, WallType wallType)
         {
-            PlaceableIfLegal(walltype, x, y);
-            game.NextTurn();
-
-        }
-        private void PlaceableIfLegal(WallType walltype, int x, int y)
-        {
-            /// <summary>
-            /// Places wall at given coordinates if it is a legal move.
-            /// </summary>
-            if (game.CurrentPlayer.WallsCount == 0) 
+            var newWall = new Wall(wall.X, wall.Y) { Type = wallType };
+            if(CanPlaceWall(newWall) && PlayersCanReachFinish(newWall))
             {
-                throw new QuoridorGameException("No walls left.");
+                wall.Type = wallType;
+                game.CurrentPlayer.WallsCount -= 1;
+                game.NextTurn();
+            } else
+            {
+                throw new QuoridorGameException("Illegal wall placement.");
+            }
+        }
+
+        /// <summary>
+        /// Places wall at given coordinates if it is a legal move.
+        /// </summary>
+        private bool CanPlaceWall(Wall wall)
+        {
+            int x = wall.X;
+            int y = wall.Y;
+            if (game.CurrentPlayer.WallsCount == 0)
+            {
+                return false;
+                //throw new QuoridorGameException("No walls left.");
             }
             if (x >= WallsGrid.GridSize || y >= WallsGrid.GridSize)
             {
-                throw new QuoridorGameException("WallsGrid index is out of bounds.");
+                return false;
+                //throw new QuoridorGameException("WallsGrid index is out of bounds.");
             }
             if (game.GameField.Walls.Grid[x, y].Type != WallType.None)
             {
-                throw new QuoridorGameException("Position already taken by other wall.");
+                return false;
+                //throw new QuoridorGameException("Position already taken by other wall.");
             }
-            if (walltype == WallType.None)
+            if (wall.Type == WallType.None)
             {
-                throw new QuoridorGameException("WallType can not be WallType:None.");
+                return false;
+                //throw new QuoridorGameException("WallType can not be WallType:None.");
             }
-            if (walltype == WallType.Vertical)
+            if (wall.Type == WallType.Vertical)
             {
                 // Check if no other vertival walls in adjacent positions
                 var up_neigh = x != 0 && (game.GameField.Walls[x - 1, y].Type == WallType.Vertical);
@@ -52,7 +67,8 @@ namespace QuoridorGame.Model.Logic
 
                 if (up_neigh || low_neigh)
                 {
-                    throw new QuoridorGameException("Position is blocked by another vertical wall.");
+                    return false;
+                    //throw new QuoridorGameException("Position is blocked by another vertical wall.");
                 }
             }
             else
@@ -63,79 +79,101 @@ namespace QuoridorGame.Model.Logic
 
                 if (left_neigh || right_neigh)
                 {
-                    throw new QuoridorGameException("Position is blocked by another horizontal wall.");
+                    return false;
+                    //throw new QuoridorGameException("Position is blocked by another horizontal wall.");
                 }
 
             }
 
-            //Check if player is not trapped
-            if (!PathExists(walltype, x, y))
-            {
-                throw new QuoridorGameException("Can't block player with a wall.");
-            }
-            // Wall may be placed if no exeptions occurred
+            // Wall can be placed if no exeptions occurred
+            return true;
         }
 
-        private bool PathExists(WallType walltype, int x, int y)
+        private void AddOrRemoveGraphEdges(Wall wall, Action<Cell, Cell> action)
         {
-            var prevCells = game.GameField.Cells.Save();
-            game.GameField.Walls[x, y].Type = walltype;
-            var currentCells = game.GameField.Cells;
-            var currentWalls = game.GameField.Walls.Grid;
-
-
-            if (currentWalls[x, y].Type == WallType.Vertical)
+            var cells = game.GameField.Cells;
+            int x = wall.X;
+            int y = wall.Y;
+            if (wall.Type == WallType.Vertical)
             {
-                //tear left <-> right upper edge
-                currentCells[x, y].RemoveEdge(currentCells[x, y + 1]);
-                //tear left <-> right lower edge
-                currentCells[x + 1, y].RemoveEdge(currentCells[x + 1, y + 1]);
+                // tear left <-> right upper edge
+                action(cells[x, y], cells[x, y + 1]);
+                // tear left <-> right lower edge
+                action(cells[x + 1, y], cells[x + 1, y + 1]);
             }
-            if (currentWalls[x, y].Type == WallType.Horizontal)
+            if (wall.Type == WallType.Horizontal)
             {
-                //tear up <-> down left node
-                currentCells[x, y].RemoveEdge(currentCells[x + 1, y]);
-                //tear up -> down right node
-                currentCells[x, y + 1].RemoveEdge(currentCells[x + 1, y + 1]);
+                // tear up <-> down left node
+                action(cells[x, y], cells[x + 1, y]);
+                // tear up -> down right node
+                action(cells[x, y + 1], cells[x + 1, y + 1]);
             }
+        }
+
+        private void RemoveGraphEdges(Wall wall)
+        {
+            AddOrRemoveGraphEdges(wall, Cell.RemoveEdge);
+        }
+
+        private void AddGraphEdges(Wall wall)
+        {
+            AddOrRemoveGraphEdges(wall, Cell.AddEdge);
+        }
+
+        private bool CanReachFinishFrom(Cell cell, int row)
+        {
+            for (int n = 0; n < CellField.FieldSize; n++)
+            {
+                if (pathfinder.PathExists(cell, game.GameField.Cells[row, n]))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private bool PlayersCanReachFinish(Wall wall)
+        {
+            RemoveGraphEdges(wall);
 
             Cell firstPlayerCell = game.FirstPlayer.CurrentCell;
             Cell secondPlayerCell = game.SecondPlayer.CurrentCell;
-            bool firstPlayerReachable = false;
-            bool secondPlayerReachable = false;
-
-            for (int n = 0; n < CellField.FieldSize; n++)
-            {
-                if (pathfinder.PathExists(secondPlayerCell, game.GameField.Cells[0, n]))
-                {
-                    firstPlayerReachable = true;
-                    break;
-                }
-            }
-
-            for (int n = 0; n < CellField.FieldSize; n++)
-            {
-                if (pathfinder.PathExists(firstPlayerCell, game.GameField.Cells[CellField.FieldSize - 1, n]))
-                {
-                    secondPlayerReachable = true;
-                    break;
-                }
-            }
+            bool firstPlayerReachable = CanReachFinishFrom(firstPlayerCell, CellField.FieldSize - 1);
+            bool secondPlayerReachable = CanReachFinishFrom(secondPlayerCell, 0);
 
             if (firstPlayerReachable && secondPlayerReachable)
             {
-                game.CurrentPlayer.WallsCount -= 1;
                 return true;
             }
             else
             {
-                game.GameField.Walls[x, y].Type = WallType.None;
-                game.GameField.Cells.Restore(prevCells);
-                game.FirstPlayer.CurrentCell = game.GameField.Cells[game.FirstPlayer.CurrentCell.X, game.FirstPlayer.CurrentCell.Y];
-                game.SecondPlayer.CurrentCell = game.GameField.Cells[game.SecondPlayer.CurrentCell.X, game.SecondPlayer.CurrentCell.Y];
-                pathfinder = new PathFinder<CellField, Cell>(game.GameField.Cells);
+                AddGraphEdges(wall); // rollback graph edges
                 return false;
             }
+        }
+
+        public IEnumerable<Wall> GetAvailableWalls()
+        {
+            var availableWalls = new List<Wall>();
+            for (int i = 0; i < WallsGrid.GridSize; i++)
+            {
+                for (int j = 0; j < WallsGrid.GridSize; j++)
+                {
+                    var wall = game.GameField.Walls[i, j];
+                    var verticalWall = new Wall(wall.X, wall.Y) { Type = WallType.Vertical };
+                    if (CanPlaceWall(verticalWall) && PlayersCanReachFinish(wall))
+                    {
+                        availableWalls.Add(verticalWall);
+                    }
+
+                    var horizontalWall = new Wall(wall.X, wall.Y) { Type = WallType.Horizontal };
+                    if (CanPlaceWall(horizontalWall) && PlayersCanReachFinish(wall))
+                    {
+                        availableWalls.Add(horizontalWall);
+                    }
+                }
+            }
+            return availableWalls;
         }
     }
 }

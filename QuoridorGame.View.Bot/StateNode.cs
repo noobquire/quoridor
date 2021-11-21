@@ -21,11 +21,9 @@ namespace QuoridorGame.View.Bot
         public StateNode(Game game, IStaticEvaluationFunction SEV,
             int actionSpaceDim, int actionNum = -1)
         {
-            this.game = game.DeepClone();
             this.SEV = SEV;
             this.actionSpaceDim = actionSpaceDim;
             this.actionNum = actionNum;//-1 for STRT_NODE
-
         }
 
         public void MakeBestMove(bool verbose = false)

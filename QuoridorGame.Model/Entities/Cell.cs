@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using QuoridorGame.Model.Interfaces;
 
 namespace QuoridorGame.Model.Entities
@@ -11,7 +10,7 @@ namespace QuoridorGame.Model.Entities
     [Serializable]
     public class Cell : IGraphNode<Cell>
     {
-        public IEnumerable<Cell> AdjacentNodes { get; set; }
+        public List<Cell> AdjacentNodes { get; set; }
         public int X { get; }
         public int Y { get; }
         public Cell ParentNode { get; set; }
@@ -27,10 +26,16 @@ namespace QuoridorGame.Model.Entities
             return AdjacentNodes.Contains(cell);
         }
 
-        public void RemoveEdge(Cell adjacentNode) 
+        public static void RemoveEdge(Cell from, Cell to) 
         {
-            AdjacentNodes = AdjacentNodes.Where(cell => cell != adjacentNode).ToList();
-            adjacentNode.AdjacentNodes = adjacentNode.AdjacentNodes.Where(cell => cell != this).ToList();
+            from.AdjacentNodes.Remove(to);
+            to.AdjacentNodes.Remove(from);
+        }
+
+        public static void AddEdge(Cell from, Cell to)
+        {
+            from.AdjacentNodes.Add(to);
+            to.AdjacentNodes.Add(from);
         }
     }
 }

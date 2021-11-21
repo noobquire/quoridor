@@ -14,6 +14,7 @@ namespace QuoridorGame.Model.Entities
         private readonly IMovementLogic movementLogic;
 
         public Cell[] AvailableMoves => CurrentPlayer == null ? Array.Empty<Cell>() : movementLogic.GetAvailableMoves(CurrentPlayer.CurrentCell).ToArray();
+        public Wall[] AvailableWalls => (CurrentPlayer?.WallsCount ?? 0) == 0 ? Array.Empty<Wall>() : wallPlacer.GetAvailableWalls().ToArray();
 
         [field:NonSerialized]
         public event EventHandler<GameStartedEventArgs> GameStarted;
@@ -144,7 +145,8 @@ namespace QuoridorGame.Model.Entities
             {
                 throw new QuoridorGameException("Cannot place wall, no game in progress.");
             }
-            wallPlacer.PlaceWall(wallType, x, y);
+            var wall = GameField.Walls[x, y];
+            wallPlacer.PlaceWall(wall, wallType);
             var playerNumber = CurrentPlayer == FirstPlayer ? 1 : 2;
             WallPlaced?.Invoke(this, new WallPlacedEventArgs(wallType, x, y, OpponentPlayer.WallsCount, playerNumber));
         }

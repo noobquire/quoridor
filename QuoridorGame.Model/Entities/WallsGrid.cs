@@ -15,7 +15,7 @@ namespace QuoridorGame.Model.Entities
            {
                 for (int j = 0; j < GridSize; j++)
                 {
-                    Grid[i, j] = new Wall();
+                    Grid[i, j] = new Wall(i, j);
                 }
             }
         }
