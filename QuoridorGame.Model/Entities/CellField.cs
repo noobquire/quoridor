@@ -1,4 +1,5 @@
-﻿using QuoridorGame.Model.Interfaces;
+﻿using QuoridorGame.Model.Exceptions;
+using QuoridorGame.Model.Interfaces;
 using System;
 
 namespace QuoridorGame.Model.Entities
@@ -139,7 +140,18 @@ namespace QuoridorGame.Model.Entities
         /// <returns>Cell at specified index.</returns>
         public Cell this[int x, int y]
         {
-            get { return Nodes[x, y]; }
+            get
+            {
+                try
+                {
+                    return Nodes[x, y];
+                }
+                catch (IndexOutOfRangeException ex)
+                {
+                    throw new QuoridorGameException(ex.Message);
+                }
+
+            }
             set { Nodes[x, y] = value; }
         }
 
