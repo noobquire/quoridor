@@ -130,5 +130,10 @@ namespace QuoridorGame.Model.Logic
             }
             return false;
         }
+
+        public void RollbackPlayerMove(Player player, Cell to)
+        {
+            player.CurrentCell = to;
+        }
     }
 }

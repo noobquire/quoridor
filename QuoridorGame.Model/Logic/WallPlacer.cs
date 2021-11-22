@@ -175,5 +175,12 @@ namespace QuoridorGame.Model.Logic
             }
             return availableWalls;
         }
+
+        public void RemoveWall(Wall wall)
+        {
+            AddGraphEdges(wall);
+            wall.Type = WallType.None;
+            game.CurrentPlayer.WallsCount += 1;
+        }
     }
 }

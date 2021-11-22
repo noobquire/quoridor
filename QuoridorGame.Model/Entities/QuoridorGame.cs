@@ -3,6 +3,7 @@ using QuoridorGame.Model.Exceptions;
 using QuoridorGame.Model.Interfaces;
 using QuoridorGame.Model.Logic;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace QuoridorGame.Model.Entities
@@ -16,7 +17,7 @@ namespace QuoridorGame.Model.Entities
         public Cell[] AvailableMoves => CurrentPlayer == null ? Array.Empty<Cell>() : movementLogic.GetAvailableMoves(CurrentPlayer.CurrentCell).ToArray();
         public Wall[] AvailableWalls => (CurrentPlayer?.WallsCount ?? 0) == 0 ? Array.Empty<Wall>() : wallPlacer.GetAvailableWalls().ToArray();
 
-        [field:NonSerialized]
+        [field: NonSerialized]
         public event EventHandler<GameStartedEventArgs> GameStarted;
         [field: NonSerialized]
         public event EventHandler<GameWonEventArgs> GameWon;
@@ -31,6 +32,7 @@ namespace QuoridorGame.Model.Entities
         public GameField GameField { get; }
         public Player FirstPlayer { get; private set; }
         public Player SecondPlayer { get; private set; }
+        public Stack<Turn> Turns { get; }
 
         public Player CurrentPlayer => State switch
         {
@@ -53,6 +55,7 @@ namespace QuoridorGame.Model.Entities
             GameField = new GameField(cellField, wallsGrid);
             FirstPlayer = new Player(GameField.Cells[0, 4]);
             SecondPlayer = new Player(GameField.Cells[8, 4]);
+            Turns = new Stack<Turn>();
 
             wallPlacer = new WallPlacer(this, new PathFinder<CellField, Cell>(GameField.Cells));
             movementLogic = new MovementLogic(this);
@@ -120,24 +123,70 @@ namespace QuoridorGame.Model.Entities
             NewTurn?.Invoke(this, new NextTurnEventArgs(2));
         }
 
-        public void Move(int x, int y)
+        public bool PopTurn()
         {
-            if(State != GameState.FirstPlayerTurn && State != GameState.SecondPlayerTurn)
+            var turnsLeft = Turns.TryPop(out var turn);
+            if (!turnsLeft)
+            {
+                return false;
+            }
+
+            if (turn is MoveTurn moveTurn)
+            {
+                State = moveTurn.StateBefore;
+                var fromCell = GameField.Cells[moveTurn.FromX, moveTurn.FromY];
+                movementLogic.RollbackPlayerMove(CurrentPlayer, fromCell);
+            }
+            else if (turn is WallTurn wallTurn)
+            {
+                State = wallTurn.StateBefore;
+                var wall = GameField.Walls[wallTurn.X, wallTurn.Y];
+                wallPlacer.RemoveWall(wall);
+            }
+
+            return true;
+        }
+
+        public void MoveWithoutEvent(int x, int y)
+        {
+            var turn = new MoveTurn
+            {
+                FromX = CurrentPlayer.CurrentCell.X,
+                FromY = CurrentPlayer.CurrentCell.Y,
+                X = x,
+                Y = y,
+                PlayerNumber = CurrentPlayer == FirstPlayer ? 1 : 2,
+                StateBefore = State
+            };
+            if (State != GameState.FirstPlayerTurn && State != GameState.SecondPlayerTurn)
             {
                 throw new QuoridorGameException("Cannot move, no game in progress.");
             }
             if (x > 9 || x < 0 || y > 9 || y < 0)
             {
                 throw new QuoridorGameException("Index was out of bounds");
-            } 
+            }
+            Turns.Push(turn);
             movementLogic.MovePlayer(CurrentPlayer, GameField.Cells[x, y]);
+        }
+
+        public void Move(int x, int y)
+        {
+            MoveWithoutEvent(x, y);
             var playerNumber = CurrentPlayer == FirstPlayer ? 1 : 2;
             PlayerMoved?.Invoke(this, new PlayerMovedEventArgs(playerNumber, x, y));
         }
 
-        public void SetWall(WallType wallType, int x, int y)
+        public void SetWallWithoutEvent(WallType wallType, int x, int y)
         {
-            if(!Enum.IsDefined(typeof(WallType), wallType))
+            var turn = new WallTurn
+            {
+                X = x,
+                Y = y,
+                PlayerNumber = CurrentPlayer == FirstPlayer ? 1 : 2,
+                StateBefore = State
+            };
+            if (!Enum.IsDefined(typeof(WallType), wallType))
             {
                 throw new QuoridorGameException($"Cannot place wall of unknown type {wallType}");
             }
@@ -147,6 +196,12 @@ namespace QuoridorGame.Model.Entities
             }
             var wall = GameField.Walls[x, y];
             wallPlacer.PlaceWall(wall, wallType);
+            Turns.Push(turn);
+        }
+
+        public void SetWall(WallType wallType, int x, int y)
+        {
+            SetWallWithoutEvent(wallType, x, y);
             var playerNumber = CurrentPlayer == FirstPlayer ? 1 : 2;
             WallPlaced?.Invoke(this, new WallPlacedEventArgs(wallType, x, y, OpponentPlayer.WallsCount, playerNumber));
         }
