@@ -182,7 +182,7 @@ namespace QuoridorGame.Model.Entities
             }
         }
 
-        public void SetWallWithoutEvent(WallType wallType, int x, int y)
+        public void SetWall(WallType wallType, int x, int y)
         {
             var turn = new WallTurn
             {
