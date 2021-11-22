@@ -11,7 +11,6 @@ namespace QuoridorGame.Model.Logic
     /// <summary>
     /// Contains logic for player movement on game field.
     /// </summary>
-    [Serializable]
     public class MovementLogic : IMovementLogic
     {
         private readonly Game game;

@@ -2,7 +2,6 @@
 
 namespace QuoridorGame.Model.Entities
 {
-    [Serializable]
     public enum GameState
     {
         Pregame,

@@ -5,7 +5,6 @@ namespace QuoridorGame.Model.Entities
     /// <summary>
     /// Quoridor game field consisting of walkable cells and walls.
     /// </summary>
-    [Serializable]
     public class GameField
     {
         public CellField Cells { get; internal set; }

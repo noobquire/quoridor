@@ -7,7 +7,6 @@ namespace QuoridorGame.Model.Entities
     /// <summary>
     /// Game field node on which the player can move.
     /// </summary>
-    [Serializable]
     public class Cell : IGraphNode<Cell>
     {
         public List<Cell> AdjacentNodes { get; set; }

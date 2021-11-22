@@ -8,7 +8,6 @@ namespace QuoridorGame.Model.Entities
     /// <summary>
     /// Cells on game field on which players can walk.
     /// </summary>
-    [Serializable]
     public class CellField : IGraph<Cell>
     {
         public const int FieldSize = 9;

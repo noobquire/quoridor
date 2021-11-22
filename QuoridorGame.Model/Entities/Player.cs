@@ -2,7 +2,6 @@
 
 namespace QuoridorGame.Model.Entities
 {
-    [Serializable]
     public class Player
     {
         public Cell CurrentCell { get; set; }

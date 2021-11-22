@@ -8,7 +8,6 @@ using System.Linq;
 
 namespace QuoridorGame.Model.Entities
 {
-    [Serializable]
     public class QuoridorGame
     {
         internal IWallPlacer wallPlacer;
@@ -17,15 +16,10 @@ namespace QuoridorGame.Model.Entities
         public Cell[] AvailableMoves => CurrentPlayer == null ? Array.Empty<Cell>() : movementLogic.GetAvailableMoves(CurrentPlayer.CurrentCell).ToArray();
         public Wall[] AvailableWalls => (CurrentPlayer?.WallsCount ?? 0) == 0 ? Array.Empty<Wall>() : wallPlacer.GetAvailableWalls().ToArray();
 
-        [field: NonSerialized]
         public event EventHandler<GameStartedEventArgs> GameStarted;
-        [field: NonSerialized]
         public event EventHandler<GameWonEventArgs> GameWon;
-        [field: NonSerialized]
         public event EventHandler<WallPlacedEventArgs> WallPlaced;
-        [field: NonSerialized]
         public event EventHandler<PlayerMovedEventArgs> PlayerMoved;
-        [field: NonSerialized]
         public event EventHandler<NextTurnEventArgs> NewTurn;
 
         public GameState State { get; private set; }
