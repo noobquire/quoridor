@@ -33,6 +33,7 @@ namespace QuoridorGame.Model.Entities
         public Player FirstPlayer { get; private set; }
         public Player SecondPlayer { get; private set; }
         public Stack<Turn> Turns { get; }
+        public bool IsBotTurn { get; set; }
 
         public Player CurrentPlayer => State switch
         {
@@ -66,12 +67,18 @@ namespace QuoridorGame.Model.Entities
             if (player == FirstPlayer)
             {
                 State = GameState.FirstPlayerWin;
-                GameWon?.Invoke(this, new GameWonEventArgs(1));
+                if(!IsBotTurn)
+                {
+                    GameWon?.Invoke(this, new GameWonEventArgs(1));
+                }
             }
             if (player == SecondPlayer)
             {
                 State = GameState.SecondPlayerWin;
-                GameWon?.Invoke(this, new GameWonEventArgs(2));
+                if(!IsBotTurn)
+                {
+                    GameWon?.Invoke(this, new GameWonEventArgs(2));
+                }
             }
         }
 
@@ -80,12 +87,18 @@ namespace QuoridorGame.Model.Entities
             if (State == GameState.FirstPlayerTurn)
             {
                 State = GameState.SecondPlayerTurn;
-                NewTurn?.Invoke(this, new NextTurnEventArgs(2));
+                if (!IsBotTurn)
+                {
+                    NewTurn?.Invoke(this, new NextTurnEventArgs(2));
+                }
             }
             else if (State == GameState.SecondPlayerTurn)
             {
                 State = GameState.FirstPlayerTurn;
-                NewTurn?.Invoke(this, new NextTurnEventArgs(1));
+                if (!IsBotTurn)
+                {
+                    NewTurn?.Invoke(this, new NextTurnEventArgs(1));
+                }
             }
         }
 
@@ -147,7 +160,7 @@ namespace QuoridorGame.Model.Entities
             return true;
         }
 
-        public void MoveWithoutEvent(int x, int y)
+        public void Move(int x, int y)
         {
             var turn = new MoveTurn
             {
@@ -168,13 +181,11 @@ namespace QuoridorGame.Model.Entities
             }
             Turns.Push(turn);
             movementLogic.MovePlayer(CurrentPlayer, GameField.Cells[x, y]);
-        }
-
-        public void Move(int x, int y)
-        {
-            MoveWithoutEvent(x, y);
-            var playerNumber = CurrentPlayer == FirstPlayer ? 1 : 2;
-            PlayerMoved?.Invoke(this, new PlayerMovedEventArgs(playerNumber, x, y));
+            if (!IsBotTurn)
+            {
+                var playerNumber = CurrentPlayer == FirstPlayer ? 1 : 2;
+                PlayerMoved?.Invoke(this, new PlayerMovedEventArgs(playerNumber, x, y));
+            }
         }
 
         public void SetWallWithoutEvent(WallType wallType, int x, int y)
@@ -197,13 +208,11 @@ namespace QuoridorGame.Model.Entities
             var wall = GameField.Walls[x, y];
             wallPlacer.PlaceWall(wall, wallType);
             Turns.Push(turn);
-        }
-
-        public void SetWall(WallType wallType, int x, int y)
-        {
-            SetWallWithoutEvent(wallType, x, y);
-            var playerNumber = CurrentPlayer == FirstPlayer ? 1 : 2;
-            WallPlaced?.Invoke(this, new WallPlacedEventArgs(wallType, x, y, OpponentPlayer.WallsCount, playerNumber));
+            if(!IsBotTurn)
+            {
+                var playerNumber = CurrentPlayer == FirstPlayer ? 1 : 2;
+                WallPlaced?.Invoke(this, new WallPlacedEventArgs(wallType, x, y, OpponentPlayer.WallsCount, playerNumber));
+            }
         }
     }
 }
