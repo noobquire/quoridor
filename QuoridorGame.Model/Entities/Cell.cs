@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using QuoridorGame.Model.Interfaces;
+using Priority_Queue;
 
 namespace QuoridorGame.Model.Entities
 {
     /// <summary>
     /// Game field node on which the player can move.
     /// </summary>
-    public class Cell : IGraphNode<Cell>
+    public class Cell : FastPriorityQueueNode, IGraphNode<Cell>
     {
         public List<Cell> AdjacentNodes { get; set; }
         public int X { get; }

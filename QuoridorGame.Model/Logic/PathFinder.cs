@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Priority_Queue;
 
 namespace QuoridorGame.Model.Logic
 {
@@ -13,7 +14,7 @@ namespace QuoridorGame.Model.Logic
     /// <typeparam name="TNode">Type of graph nodes.</typeparam>
     public class PathFinder<TGraph, TNode> : IPathFinder<TGraph, TNode>
         where TGraph : IGraph<TNode>
-        where TNode : IGraphNode<TNode>
+        where TNode : FastPriorityQueueNode, IGraphNode<TNode>
     {
         protected readonly IGraph<TNode> graph;
 
@@ -42,8 +43,9 @@ namespace QuoridorGame.Model.Logic
             }
 
             var path = new List<TNode>();
-            var queue = new Queue<TNode>();
-            queue.Enqueue(start);
+            var queue = new FastPriorityQueue<TNode>(100);
+            var distance = GetDistance(start, finish);
+            queue.Enqueue(start, distance);
 
             while (queue.Count > 0)
             {
@@ -63,11 +65,17 @@ namespace QuoridorGame.Model.Logic
 
                     adjacentNode.ParentNode = node;
                     path.Add(adjacentNode);
-                    queue.Enqueue(adjacentNode);
+                    distance = GetDistance(adjacentNode, finish);
+                    queue.Enqueue(adjacentNode, distance);
                 }
             }
 
             return Enumerable.Empty<TNode>();
+        }
+
+        private static int GetDistance(TNode start, TNode target)
+        {
+            return Math.Abs(target.X - start.X) + Math.Abs(target.Y - start.Y);
         }
 
         protected IEnumerable<TNode> GetPathFromParents(TNode start, TNode finish)

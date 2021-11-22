@@ -22,10 +22,9 @@ namespace QuoridorGame.Controller
             {
                 command = Console.ReadLine();
                 var splitCommand = command.Split(Array.Empty<char>());
-                /*
+
                 try
                 {
-                */
                     switch (splitCommand[0].ToLower())
                     {
                         case "black":
@@ -51,8 +50,8 @@ namespace QuoridorGame.Controller
                             Console.WriteLine("Unknown command");
                             break;
                     }
-                    /*
-                }               
+
+                }
                 catch (QuoridorGameException ex)
                 {
                     Console.WriteLine(ex.Message);
@@ -65,19 +64,19 @@ namespace QuoridorGame.Controller
                 {
                     Console.WriteLine("Invalid input");
                 }
-                */
+
             }
         }
-        
+
         public (int x, int y) ParseJumpCoordinates(string jumpCoordinates)
         {
             char horizontalChar = jumpCoordinates[0];
-            if(horizontalChar < 'A' || horizontalChar > 'I')
+            if (horizontalChar < 'A' || horizontalChar > 'I')
             {
                 throw new QuoridorGameException("Invalid coordinate");
             }
             char verticalChar = jumpCoordinates[1];
-            if(verticalChar < '1' || verticalChar > '9')
+            if (verticalChar < '1' || verticalChar > '9')
             {
                 throw new QuoridorGameException("Invalid coordinate");
             }
@@ -100,7 +99,7 @@ namespace QuoridorGame.Controller
                 throw new QuoridorGameException("Invalid coordinate");
             }
             char wallType = wallCoordinates[2];
-            if(wallType  != 'v' && wallType != 'h')
+            if (wallType != 'v' && wallType != 'h')
             {
                 throw new QuoridorGameException("Invalid wall type");
             }
