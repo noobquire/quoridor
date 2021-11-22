@@ -24,8 +24,8 @@ namespace QuoridorGame.View.Bot
             var SEV = new RandomSEV();
             game.IsBotTurn = true;
             var tree = new StateNode(game, SEV);
-            tree.Rollout(3);
-            game.IsBotTurn = true;
+            tree.Rollout(1);
+            game.IsBotTurn = false;
             tree.MakeBestMove(true);
             sw.Stop();
             Debug.WriteLine($"bot turn took {sw.ElapsedMilliseconds/1000}s");
