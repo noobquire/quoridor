@@ -5,6 +5,7 @@ using QuoridorGame.Model.Exceptions;
 using System;
 using System.Linq;
 using QuoridorGame.Model;
+using System.Diagnostics;
 
 namespace QuoridorGame.View.Bot
 {
@@ -12,25 +13,44 @@ namespace QuoridorGame.View.Bot
     {
         private Game game;
         private IStaticEvaluationFunction SEV;
-        private int actionSpaceDim;
-        private int actionNum;
-        public double[] nextScores;
-        public double SEVScore;
-        public int bestMove;
+        private double[] nextScores;
+        private bool startnode;
+
+        private int bestActionIdx;
+        private bool actionIsMove;
+
 
         public StateNode(Game game, IStaticEvaluationFunction SEV,
-            int actionSpaceDim, int actionNum = -1)
+            bool startnode = true)
         {
+            this.game = game;
             this.SEV = SEV;
-            this.actionSpaceDim = actionSpaceDim;
-            this.actionNum = actionNum;//-1 for STRT_NODE
+            this.startnode = startnode;
         }
 
         public void MakeBestMove(bool verbose = false)
         {
-            MakeActionIFLegal(bestMove, true);
+            if (actionIsMove)
+            {
+                var cell = game.AvailableMoves[bestActionIdx];
+                game.Move(cell.X, cell.Y);
+                if (verbose) 
+                {
+                    Debug.WriteLine($"Bot moved to cell {cell.X} {cell.Y}");
+                }
+            }
+            else 
+            {
+                var wall = game.AvailableWalls[bestActionIdx];
+                game.SetWall(wall.X, wall.Y, wall.Type);
+
+                if (verbose)
+                {
+                    Debug.WriteLine($"Bot placed wall at {wall.X} {wall.Y}");
+                }
+            }
         }
-        private bool MakeActionIFLegal(int actionNum, bool verbose = false) 
+        /*private bool MakeActionIFLegal(int actionNum, bool verbose = false) 
         {
             //make action if allowed
 
@@ -125,9 +145,8 @@ namespace QuoridorGame.View.Bot
             }
 
             return true;
-        }
-
-        public double Rollout(int NRollouts)
+        }*/
+        /*public double Rollout(int NRollouts)
         {
             //NRollouts should be odd to start with max search
 
@@ -149,6 +168,7 @@ namespace QuoridorGame.View.Bot
                     }
                     double maxScore = nextScores.Max();
                     bestMove = Array.IndexOf(nextScores, maxScore);
+                    SEVScore = maxScore;
                 }
                 else if (NRollouts == 0)
                 {
@@ -157,6 +177,65 @@ namespace QuoridorGame.View.Bot
 
             }
             return SEVScore;
+        }*/
+
+
+        public double Rollout(int NRollouts) 
+        {
+            double Score = 0;
+
+            if (NRollouts > 0)
+            {
+                //**negamax optimization**
+                //+1 for odd (max search) rollouts
+                //-1 for even (min search) rollouts
+                double sign = Math.Pow(-1, 1 + NRollouts % 2);
+
+                var moveScores = new double[game.AvailableMoves.Length];
+                for (int i = 0; i < game.AvailableMoves.Length; i++)
+                {
+                    var cell = game.AvailableMoves[i];
+                    game.Move(cell.X, cell.Y);
+                    var nextState = new StateNode(game, SEV);
+                    moveScores[i] = sign * nextState.Rollout(NRollouts - 1);
+                    game.PopTurn();
+                }
+
+                var wallScores = new double[game.AvailableWalls.Length+1];
+                //Make wallScores size at lest 1 
+                wallScores[game.AvailableWalls.Length] = System.Double.NegativeInfinity;
+                for (int i = 0; i < game.AvailableWalls.Length; i++) 
+                {
+                    var wall = game.AvailableWalls[i];
+                    game.SetWall(wall.X, wall.Y, wall.Type);
+                    var nextState = new StateNode(game, SEV);
+                    wallScores[i] = sign * nextState.Rollout(NRollouts - 1);
+                    game.PopTurn();
+                }
+               
+
+                double bestMove = moveScores.Max();
+                double bestWall = wallScores.Max();
+
+                if (bestMove > bestWall)
+                {
+                    Score = bestMove;
+                    actionIsMove = true;
+                    bestActionIdx = Array.IndexOf(moveScores, bestMove);
+                }
+                else 
+                {
+                    Score = bestWall;
+                    actionIsMove = true;
+                    bestActionIdx = Array.IndexOf(moveScores, bestMove);
+                }
+            }
+            else 
+            {
+                Score = SEV.Eval(game);
+            }
+
+            return Score;
         }
     }
 }
