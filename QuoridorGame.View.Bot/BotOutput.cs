@@ -1,5 +1,6 @@
 ﻿using QuoridorGame.Model.Events;
 using System;
+using System.Diagnostics;
 using Game = QuoridorGame.Model.Entities.QuoridorGame;
 
 namespace QuoridorGame.View.Bot
@@ -20,6 +21,12 @@ namespace QuoridorGame.View.Bot
             game.WallPlaced += OnWallPlaced;
             game.PlayerMoved += OnPlayerMoved;
             game.NewTurn += OnNewTurn;
+            game.GameWon += OnGameWon;
+        }
+
+        private void OnGameWon(object sender, GameWonEventArgs e)
+        {
+            Environment.Exit(0);
         }
 
         private void OnWallPlaced(object sender, WallPlacedEventArgs e)
