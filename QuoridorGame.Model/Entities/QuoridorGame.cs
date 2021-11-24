@@ -24,6 +24,7 @@ namespace QuoridorGame.Model.Entities
 
         public GameState State { get; private set; }
         public GameField GameField { get; }
+        public PathFinder<CellField, Cell> pathFinder;
         public Player FirstPlayer { get; private set; }
         public Player SecondPlayer { get; private set; }
         public Stack<Turn> Turns { get; }
@@ -52,7 +53,9 @@ namespace QuoridorGame.Model.Entities
             SecondPlayer = new Player(GameField.Cells[8, 4]);
             Turns = new Stack<Turn>();
 
-            wallPlacer = new WallPlacer(this, new PathFinder<CellField, Cell>(GameField.Cells));
+            pathFinder = new PathFinder<CellField, Cell>(GameField.Cells);
+
+            wallPlacer = new WallPlacer(this, pathFinder);
             movementLogic = new MovementLogic(this);
         }
 

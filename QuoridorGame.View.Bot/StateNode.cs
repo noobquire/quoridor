@@ -45,7 +45,8 @@ namespace QuoridorGame.View.Bot
 
                 if (verbose)
                 {
-                    Console.WriteLine($"Bot placed wall at {wall.X} {wall.Y}");
+                    Console.WriteLine($"Bot placed wall at {wall.X} {wall.Y}" +
+                        $" {wall.Type.ToString()}");
                 }
             }
         }
@@ -84,8 +85,9 @@ namespace QuoridorGame.View.Bot
                 }
                
 
-                double bestMove = moveScores.Max();
-                double bestWall = wallScores.Max();
+                double bestMove = moveScores.Min();
+                double bestWall = wallScores.Min();
+
 
                 if (bestMove > bestWall)
                 {

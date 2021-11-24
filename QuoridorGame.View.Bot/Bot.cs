@@ -21,12 +21,12 @@ namespace QuoridorGame.View.Bot
             var sw = new Stopwatch();
             sw.Start();
             //var gameCopy = game.DeepClone();
-            var SEV = new RandomSEV();
+            var SEV = new LogSEV();
             game.IsBotTurn = true;
             var tree = new StateNode(game, SEV);
             tree.Rollout(1);
             game.IsBotTurn = false;
-            tree.MakeBestMove(true);
+            tree.MakeBestMove(false);
             sw.Stop();
             Debug.WriteLine($"bot turn took {sw.ElapsedMilliseconds/1000}s");
         }

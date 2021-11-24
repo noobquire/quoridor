@@ -102,5 +102,16 @@ namespace QuoridorGame.Model.Logic
             var path = FindShortestPath(start, finish);
             return path.Any();
         }
+        public int ShortestPathLengh(TNode start, TNode finish)
+        {
+            if (start.Equals(finish))
+            {
+                return 0;
+            }
+
+            var path = FindShortestPath(start, finish);
+            return path.Count();
+        }
+
     }
 }
