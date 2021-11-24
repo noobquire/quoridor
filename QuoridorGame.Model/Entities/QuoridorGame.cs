@@ -35,6 +35,8 @@ namespace QuoridorGame.Model.Entities
         {
             GameState.FirstPlayerTurn => FirstPlayer,
             GameState.SecondPlayerTurn => SecondPlayer,
+            GameState.FirstPlayerWin => FirstPlayer,
+            GameState.SecondPlayerWin => SecondPlayer,
             _ => null
         };
 
@@ -42,6 +44,8 @@ namespace QuoridorGame.Model.Entities
         {
             GameState.FirstPlayerTurn => SecondPlayer,
             GameState.SecondPlayerTurn => FirstPlayer,
+            GameState.FirstPlayerWin => SecondPlayer,
+            GameState.SecondPlayerWin => FirstPlayer,
             _ => null
         };
 
