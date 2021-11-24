@@ -25,7 +25,7 @@ namespace QuoridorGame.View.Bot
         private void OnWallPlaced(object sender, WallPlacedEventArgs e)
         {
             // Do not handle if it was other player's turn
-            if (e.PlayerNumber != bot.PlayerNumber)
+            if (e.PlayerNumber == bot.PlayerNumber)
             {
                 return;
             }
@@ -51,7 +51,8 @@ namespace QuoridorGame.View.Bot
             var y = (char)(e.Y + 'A');
 
             // TODO: decide move or jump
-            var message = $"move {y}{x}";
+            var moveOrJump = e.Jump ? "jump" : "move";
+            var message = $"{moveOrJump} {y}{x}";
 
             Console.WriteLine(message);
         }

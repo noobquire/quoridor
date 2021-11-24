@@ -8,5 +8,6 @@ namespace QuoridorGame.Model.Interfaces
         void MovePlayer(Player player, Cell destination);
         void RollbackPlayerMove(Player player, Cell to);
         IEnumerable<Cell> GetAvailableMoves(Cell from);
+        IEnumerable<Cell> GetAvailableJumps(Cell from);
     }
 }
