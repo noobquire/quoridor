@@ -33,8 +33,8 @@ namespace QuoridorGame.View.Bot.Logic
 
 
 
-            return -alpha * Math.Log2(playerPath) +
-                betta * Math.Log2(enemyPath) +
+            return -alpha * Math.Log2(1+playerPath) +
+                betta * Math.Log2(1+enemyPath) +
                 gamma * game.CurrentPlayer.WallsCount;
 
         }
