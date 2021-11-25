@@ -13,7 +13,7 @@ namespace QuoridorGame.Model.Entities
         internal IWallPlacer wallPlacer;
         private readonly IMovementLogic movementLogic;
 
-        public Cell[] AvailableMoves => CurrentPlayer == null ? Array.Empty<Cell>() : movementLogic.GetAvailableMoves(CurrentPlayer.CurrentCell).Concat(AvailableJumps).ToArray();
+        public Cell[] AvailableMoves => CurrentPlayer == null ? Array.Empty<Cell>() : movementLogic.GetAvailableMoves(CurrentPlayer.CurrentCell).Union(AvailableJumps).ToArray();
         public Cell[] AvailableJumps => CurrentPlayer == null ? Array.Empty<Cell>() : movementLogic.GetAvailableJumps(CurrentPlayer.CurrentCell).ToArray();
         public Wall[] AvailableWalls => (CurrentPlayer?.WallsCount ?? 0) == 0 ? Array.Empty<Wall>() : wallPlacer.GetAvailableWalls().ToArray();
 

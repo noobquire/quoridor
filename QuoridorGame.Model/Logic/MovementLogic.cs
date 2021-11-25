@@ -123,14 +123,10 @@ namespace QuoridorGame.Model.Logic
                 var cellAfterEnemy = GetCellAtSide(enemyCell, enemySide);
                 if (cellAfterEnemy != null)
                 {
-                    return from.AdjacentNodes
-                        .Where(cell => cell != enemyCell)
-                        .Concat(new[] { cellAfterEnemy });
+                    return new[] { cellAfterEnemy };
                 }
 
-                return from.AdjacentNodes
-                        .Where(cell => cell != enemyCell)
-                        .Concat(enemyCell.AdjacentNodes.Where(cell => cell != from));
+                return enemyCell.AdjacentNodes.Where(cell => cell != from);
             }
             else
             {

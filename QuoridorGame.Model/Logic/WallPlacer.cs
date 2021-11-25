@@ -12,6 +12,7 @@ namespace QuoridorGame.Model.Logic
     {
         private readonly Game game;
         private IPathFinder<CellField, Cell> pathfinder;
+        private string errMessage = "Can't block players with wall";
         public WallPlacer(Game game, IPathFinder<CellField, Cell> pathfinder)
         {
             this.game = game;
@@ -24,11 +25,12 @@ namespace QuoridorGame.Model.Logic
             if (CanPlaceWall(newWall) && PlayersCanReachFinish(newWall))
             {
                 wall.Type = wallType;
+                RemoveGraphEdges(newWall);
                 game.CurrentPlayer.WallsCount -= 1;
             }
             else
             {
-                throw new QuoridorGameException("Illegal wall placement.");
+                throw new QuoridorGameException($"Can't place {newWall}. " + errMessage);
             }
         }
 
@@ -41,23 +43,24 @@ namespace QuoridorGame.Model.Logic
             int y = wall.Y;
             if (game.CurrentPlayer.WallsCount == 0)
             {
+                errMessage = "No walls left.";
                 return false;
-                //throw new QuoridorGameException("No walls left.");
             }
             if (x >= WallsGrid.GridSize || y >= WallsGrid.GridSize)
             {
+                errMessage = "WallsGrid index is out of bounds.";
                 return false;
-                //throw new QuoridorGameException("WallsGrid index is out of bounds.");
+                //throw new QuoridorGameException();
             }
             if (game.GameField.Walls.Grid[x, y].Type != WallType.None)
             {
+                errMessage = "Position already taken by other wall.";
                 return false;
-                //throw new QuoridorGameException("Position already taken by other wall.");
             }
             if (wall.Type == WallType.None)
             {
+                errMessage = "WallType can not be WallType:None.";
                 return false;
-                //throw new QuoridorGameException("WallType can not be WallType:None.");
             }
             if (wall.Type == WallType.Vertical)
             {
@@ -67,8 +70,8 @@ namespace QuoridorGame.Model.Logic
 
                 if (up_neigh || low_neigh)
                 {
+                    errMessage = "Position is blocked by another vertical wall.";
                     return false;
-                    //throw new QuoridorGameException("Position is blocked by another vertical wall.");
                 }
             }
             else
@@ -79,8 +82,8 @@ namespace QuoridorGame.Model.Logic
 
                 if (left_neigh || right_neigh)
                 {
+                    errMessage = "Position is blocked by another horizontal wall.";
                     return false;
-                    //throw new QuoridorGameException("Position is blocked by another horizontal wall.");
                 }
 
             }
@@ -143,6 +146,7 @@ namespace QuoridorGame.Model.Logic
 
             if (firstPlayerReachable && secondPlayerReachable)
             {
+                AddGraphEdges(wall); // rollback graph edges
                 return true;
             }
             else
@@ -150,6 +154,7 @@ namespace QuoridorGame.Model.Logic
                 AddGraphEdges(wall); // rollback graph edges
                 return false;
             }
+            
         }
 
         public IEnumerable<Wall> GetAvailableWalls()
@@ -161,13 +166,13 @@ namespace QuoridorGame.Model.Logic
                 {
                     var wall = game.GameField.Walls[i, j];
                     var verticalWall = new Wall(wall.X, wall.Y) { Type = WallType.Vertical };
-                    if (CanPlaceWall(verticalWall) && PlayersCanReachFinish(wall))
+                    if (CanPlaceWall(verticalWall) && PlayersCanReachFinish(verticalWall))
                     {
                         availableWalls.Add(verticalWall);
                     }
 
                     var horizontalWall = new Wall(wall.X, wall.Y) { Type = WallType.Horizontal };
-                    if (CanPlaceWall(horizontalWall) && PlayersCanReachFinish(wall))
+                    if (CanPlaceWall(horizontalWall) && PlayersCanReachFinish(horizontalWall))
                     {
                         availableWalls.Add(horizontalWall);
                     }

@@ -37,5 +37,15 @@ namespace QuoridorGame.Model.Entities
             from.AdjacentNodes.Add(to);
             to.AdjacentNodes.Add(from);
         }
+
+        public override string ToString()
+        {
+            var x = (X + 1).ToString();
+            var y = (char)(Y + 'A');
+
+            // TODO: decide move or jump
+            var message = $"move/jump {y}{x}";
+            return message;
+        }
     }
 }

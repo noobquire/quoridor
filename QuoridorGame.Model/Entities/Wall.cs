@@ -23,5 +23,15 @@ namespace QuoridorGame.Model.Entities
             Y = y;
             Type = WallType.None;
         }
+
+        public override string ToString()
+        {
+            var x = (X + 1).ToString();
+            var y = (char)(Y + 'S');
+            var type = Type == WallType.Vertical ? 'v' : 'h';
+
+            var message = $"wall {y}{x}{type}";
+            return message;
+        }
     }
 }
