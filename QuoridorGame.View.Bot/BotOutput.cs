@@ -1,5 +1,6 @@
 ﻿using QuoridorGame.Model.Events;
 using System;
+using System.Diagnostics;
 using Game = QuoridorGame.Model.Entities.QuoridorGame;
 
 namespace QuoridorGame.View.Bot
@@ -20,12 +21,18 @@ namespace QuoridorGame.View.Bot
             game.WallPlaced += OnWallPlaced;
             game.PlayerMoved += OnPlayerMoved;
             game.NewTurn += OnNewTurn;
+            game.GameWon += OnGameWon;
+        }
+
+        private void OnGameWon(object sender, GameWonEventArgs e)
+        {
+            Environment.Exit(0);
         }
 
         private void OnWallPlaced(object sender, WallPlacedEventArgs e)
         {
             // Do not handle if it was other player's turn
-            if (e.PlayerNumber != bot.PlayerNumber)
+            if (e.PlayerNumber == bot.PlayerNumber)
             {
                 return;
             }
@@ -51,7 +58,8 @@ namespace QuoridorGame.View.Bot
             var y = (char)(e.Y + 'A');
 
             // TODO: decide move or jump
-            var message = $"move {y}{x}";
+            var moveOrJump = e.Jump ? "jump" : "move";
+            var message = $"{moveOrJump} {y}{x}";
 
             Console.WriteLine(message);
         }

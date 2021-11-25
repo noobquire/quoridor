@@ -21,12 +21,12 @@ namespace QuoridorGame.Model.Logic
         public void PlaceWall(Wall wall, WallType wallType)
         {
             var newWall = new Wall(wall.X, wall.Y) { Type = wallType };
-            if(CanPlaceWall(newWall) && PlayersCanReachFinish(newWall))
+            if (CanPlaceWall(newWall) && PlayersCanReachFinish(newWall))
             {
                 wall.Type = wallType;
                 game.CurrentPlayer.WallsCount -= 1;
-                game.NextTurn();
-            } else
+            }
+            else
             {
                 throw new QuoridorGameException("Illegal wall placement.");
             }

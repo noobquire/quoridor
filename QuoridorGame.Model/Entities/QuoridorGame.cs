@@ -13,7 +13,8 @@ namespace QuoridorGame.Model.Entities
         internal IWallPlacer wallPlacer;
         private readonly IMovementLogic movementLogic;
 
-        public Cell[] AvailableMoves => CurrentPlayer == null ? Array.Empty<Cell>() : movementLogic.GetAvailableMoves(CurrentPlayer.CurrentCell).ToArray();
+        public Cell[] AvailableMoves => CurrentPlayer == null ? Array.Empty<Cell>() : movementLogic.GetAvailableMoves(CurrentPlayer.CurrentCell).Concat(AvailableJumps).ToArray();
+        public Cell[] AvailableJumps => CurrentPlayer == null ? Array.Empty<Cell>() : movementLogic.GetAvailableJumps(CurrentPlayer.CurrentCell).ToArray();
         public Wall[] AvailableWalls => (CurrentPlayer?.WallsCount ?? 0) == 0 ? Array.Empty<Wall>() : wallPlacer.GetAvailableWalls().ToArray();
 
         public event EventHandler<GameStartedEventArgs> GameStarted;
@@ -34,6 +35,8 @@ namespace QuoridorGame.Model.Entities
         {
             GameState.FirstPlayerTurn => FirstPlayer,
             GameState.SecondPlayerTurn => SecondPlayer,
+            GameState.FirstPlayerWin => FirstPlayer,
+            GameState.SecondPlayerWin => SecondPlayer,
             _ => null
         };
 
@@ -41,6 +44,8 @@ namespace QuoridorGame.Model.Entities
         {
             GameState.FirstPlayerTurn => SecondPlayer,
             GameState.SecondPlayerTurn => FirstPlayer,
+            GameState.FirstPlayerWin => SecondPlayer,
+            GameState.SecondPlayerWin => FirstPlayer,
             _ => null
         };
 
@@ -177,12 +182,15 @@ namespace QuoridorGame.Model.Entities
                 throw new QuoridorGameException("Index was out of bounds");
             }
             Turns.Push(turn);
-            movementLogic.MovePlayer(CurrentPlayer, GameField.Cells[x, y]);
+            var cell = GameField.Cells[x, y];
+            bool isJump = AvailableJumps.Contains(cell);
+            movementLogic.MovePlayer(CurrentPlayer, cell);
             if (!IsBotTurn)
             {
                 var playerNumber = CurrentPlayer == FirstPlayer ? 1 : 2;
-                PlayerMoved?.Invoke(this, new PlayerMovedEventArgs(playerNumber, x, y));
+                PlayerMoved?.Invoke(this, new PlayerMovedEventArgs(playerNumber, x, y, isJump));
             }
+            NextTurn();
         }
 
         public void SetWall(WallType wallType, int x, int y)
@@ -210,6 +218,7 @@ namespace QuoridorGame.Model.Entities
                 var playerNumber = CurrentPlayer == FirstPlayer ? 1 : 2;
                 WallPlaced?.Invoke(this, new WallPlacedEventArgs(wallType, x, y, OpponentPlayer.WallsCount, playerNumber));
             }
+            NextTurn();
         }
     }
 }
