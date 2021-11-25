@@ -32,7 +32,7 @@ namespace QuoridorGame.View.Bot
         private void OnWallPlaced(object sender, WallPlacedEventArgs e)
         {
             // Do not handle if it was other player's turn
-            if (e.PlayerNumber == bot.PlayerNumber)
+            if (e.PlayerNumber != bot.PlayerNumber)
             {
                 return;
             }
