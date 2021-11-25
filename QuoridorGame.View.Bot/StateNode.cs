@@ -74,7 +74,7 @@ namespace QuoridorGame.View.Bot
 
                 var wallScores = new double[game.AvailableWalls.Length+1];
                 //Make wallScores size at lest 1 
-                wallScores[game.AvailableWalls.Length] = System.Double.NegativeInfinity;
+                wallScores[game.AvailableWalls.Length] = System.Double.PositiveInfinity;
                 for (int i = 0; i < game.AvailableWalls.Length; i++) 
                 {
                     var wall = game.AvailableWalls[i];
@@ -87,9 +87,9 @@ namespace QuoridorGame.View.Bot
 
                 double bestMove = moveScores.Min();
                 double bestWall = wallScores.Min();
+                
 
-
-                if (bestMove > bestWall)
+                if (bestMove < bestWall)
                 {
                     Score = bestMove;
                     actionIsMove = true;
