@@ -116,22 +116,20 @@ namespace QuoridorGame.Model.Logic
 
         public IEnumerable<Cell> GetAvailableJumps(Cell from)
         {
-            if (from.AdjacentNodes.Contains(game.OpponentPlayer.CurrentCell))
-            {
-                var enemyCell = game.OpponentPlayer.CurrentCell;
-                var enemySide = GetSide(from, enemyCell);
-                var cellAfterEnemy = GetCellAtSide(enemyCell, enemySide);
-                if (cellAfterEnemy != null)
-                {
-                    return new[] { cellAfterEnemy };
-                }
-
-                return enemyCell.AdjacentNodes.Where(cell => cell != from);
-            }
-            else
+            if (!from.AdjacentNodes.Contains(game.OpponentPlayer.CurrentCell))
             {
                 return Enumerable.Empty<Cell>();
             }
+            var enemyCell = game.OpponentPlayer.CurrentCell;
+            var enemySide = GetSide(from, enemyCell);
+            var cellAfterEnemy = GetCellAtSide(enemyCell, enemySide);
+
+            if (cellAfterEnemy != null && enemyCell.AdjacentNodes.Contains(cellAfterEnemy))
+            {
+                return new[] { cellAfterEnemy };
+            }
+
+            return enemyCell.AdjacentNodes.Where(cell => cell != from);
         }
     }
 }
