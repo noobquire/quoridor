@@ -24,8 +24,8 @@ namespace QuoridorGame.View.Bot.Logic
             var enemyLengths = new int[9];
             for (int i = 0; i <= 8; i++) 
             {
-                playerLengths[i] = game.pathFinder.ShortestPathLengh(playerCell, game.GameField.Cells[playerRow, i]);
-                enemyLengths[i] = game.pathFinder.ShortestPathLengh(enemyCell, game.GameField.Cells[enemyRow, i]);
+                playerLengths[i] = game.pathFinder.ShortestPathLength(playerCell, game.GameField.Cells[playerRow, i]);
+                enemyLengths[i] = game.pathFinder.ShortestPathLength(enemyCell, game.GameField.Cells[enemyRow, i]);
             }
             int playerPath = playerLengths.Min();
             int enemyPath = enemyLengths.Min();
