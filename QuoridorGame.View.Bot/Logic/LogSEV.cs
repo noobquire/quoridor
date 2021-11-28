@@ -22,7 +22,7 @@ namespace QuoridorGame.View.Bot.Logic
 
             var playerLengths = new int[9];
             var enemyLengths = new int[9];
-            for (int i = 0; i <= 8; i++) 
+            for (int i = 0; i <= 8; i++)
             {
                 playerLengths[i] = game.pathFinder.ShortestPathLength(playerCell, game.GameField.Cells[playerRow, i]);
                 enemyLengths[i] = game.pathFinder.ShortestPathLength(enemyCell, game.GameField.Cells[enemyRow, i]);
@@ -31,10 +31,13 @@ namespace QuoridorGame.View.Bot.Logic
             int enemyPath = enemyLengths.Min();
 
 
+            if (playerPath == 0) // win crutch
+            {
+                return int.MinValue;
+            }
 
-
-            return -alpha * Math.Log2(1+playerPath) +
-                betta * Math.Log2(1+enemyPath) +
+            return -alpha * Math.Log2(1 + playerPath) +
+                betta * Math.Log2(1 + enemyPath) +
                 gamma * game.CurrentPlayer.WallsCount;
 
         }
