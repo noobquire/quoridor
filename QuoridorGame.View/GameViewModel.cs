@@ -27,10 +27,11 @@ namespace QuoridorGame.View.ConsoleGraphics
                     {
                         ViewField[i][j] = new ViewCell(ViewCellType.EmptyCell);
                     }
-                    else if(i % 2 != 0 && j % 2 == 0)
+                    else if (i % 2 != 0 && j % 2 == 0)
                     {
                         ViewField[i][j] = new ViewCell(ViewCellType.NoWallUnderCell);
-                    } else
+                    }
+                    else
                     {
                         ViewField[i][j] = new ViewCell(ViewCellType.NoWall);
                     }
@@ -46,7 +47,7 @@ namespace QuoridorGame.View.ConsoleGraphics
 
             // highlight available moves
             var availableMoves = game.AvailableMoves;
-            foreach(var cell in availableMoves)
+            foreach (var cell in availableMoves)
             {
                 ViewField[cell.X * 2][cell.Y * 2].Type = ViewCellType.AvailableMoveCell;
             }

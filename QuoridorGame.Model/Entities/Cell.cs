@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using QuoridorGame.Model.Interfaces;
+using Priority_Queue;
 
 namespace QuoridorGame.Model.Entities
 {
     /// <summary>
     /// Game field node on which the player can move.
     /// </summary>
-    [Serializable]
-    public class Cell : IGraphNode<Cell>
+    public class Cell : FastPriorityQueueNode, IGraphNode<Cell>
     {
-        public IEnumerable<Cell> AdjacentNodes { get; set; }
+        public List<Cell> AdjacentNodes { get; set; }
         public int X { get; }
         public int Y { get; }
         public Cell ParentNode { get; set; }
@@ -27,10 +26,26 @@ namespace QuoridorGame.Model.Entities
             return AdjacentNodes.Contains(cell);
         }
 
-        public void RemoveEdge(Cell adjacentNode) 
+        public static void RemoveEdge(Cell from, Cell to) 
         {
-            AdjacentNodes = AdjacentNodes.Where(cell => cell != adjacentNode).ToList();
-            adjacentNode.AdjacentNodes = adjacentNode.AdjacentNodes.Where(cell => cell != this).ToList();
+            from.AdjacentNodes.Remove(to);
+            to.AdjacentNodes.Remove(from);
+        }
+
+        public static void AddEdge(Cell from, Cell to)
+        {
+            from.AdjacentNodes.Add(to);
+            to.AdjacentNodes.Add(from);
+        }
+
+        public override string ToString()
+        {
+            var x = (X + 1).ToString();
+            var y = (char)(Y + 'A');
+
+            // TODO: decide move or jump
+            var message = $"move/jump {y}{x}";
+            return message;
         }
     }
 }

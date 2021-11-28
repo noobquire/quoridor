@@ -1,5 +1,9 @@
 ﻿using Game = QuoridorGame.Model.Entities.QuoridorGame;
+using QuoridorGame.View.Bot.Logic;
+using QuoridorGame.View.Bot;
 using System;
+using QuoridorGame.Model;
+using System.Diagnostics;
 
 namespace QuoridorGame.View.Bot
 {
@@ -14,8 +18,17 @@ namespace QuoridorGame.View.Bot
 
         public void MakeTurn(Game game)
         {
-            // TODO: Process game state and make turn
-            throw new NotImplementedException();
+            var sw = new Stopwatch();
+            sw.Start();
+            //var gameCopy = game.DeepClone();
+            var SEV = new LogSEV();
+            game.IsBotTurn = true;
+            var tree = new StateNode(game, SEV);
+            tree.Rollout(1);
+            game.IsBotTurn = false;
+            tree.MakeBestMove(false);
+            sw.Stop();
+            Debug.WriteLine($"bot turn took {sw.ElapsedMilliseconds/1000}s");
         }
     }
 }

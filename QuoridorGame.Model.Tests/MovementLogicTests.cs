@@ -38,6 +38,7 @@ namespace QuoridorGame.Model.Tests
         public void GetAvailableMoves_FromCellAboveEnemy_ShouldReturnExpectedCells()
         {
             var cell = game.GameField.Cells[7, 4];
+            game.FirstPlayer.CurrentCell = cell;
             var expectedMoves = new[]
             {
                 game.GameField.Cells[6, 4],
@@ -47,7 +48,8 @@ namespace QuoridorGame.Model.Tests
                 game.GameField.Cells[8, 5]
             };
 
-            var actualMoves = movementLogic.GetAvailableMoves(cell);
+
+            var actualMoves = game.AvailableMoves;
 
             CollectionAssert.AreEquivalent(expectedMoves, actualMoves);
         }
@@ -56,6 +58,7 @@ namespace QuoridorGame.Model.Tests
         public void GetAvailableMoves_FromCellNearEnemy_ShouldReturnExpectedCells()
         {
             var cell = game.GameField.Cells[8, 3];
+            game.FirstPlayer.CurrentCell = cell;
             var expectedMoves = new[]
             {
                 game.GameField.Cells[8, 2],
@@ -63,7 +66,7 @@ namespace QuoridorGame.Model.Tests
                 game.GameField.Cells[7, 3]
             };
 
-            var actualMoves = movementLogic.GetAvailableMoves(cell);
+            var actualMoves = game.AvailableMoves;
 
             CollectionAssert.AreEquivalent(expectedMoves, actualMoves);
         }
@@ -99,9 +102,7 @@ namespace QuoridorGame.Model.Tests
         [Test]
         public void MovePlayer_MoveToCell_ShouldEndTurn()
         {
-            var cell = game.GameField.Cells[1, 4];
-
-            movementLogic.MovePlayer(game.FirstPlayer, cell);
+            game.Move(1, 4);
 
             Assert.AreEqual(GameState.SecondPlayerTurn, game.State);
         }
@@ -121,9 +122,8 @@ namespace QuoridorGame.Model.Tests
         {
             var cell = game.GameField.Cells[7, 4];
             game.FirstPlayer.CurrentCell = cell;
-            cell = game.GameField.Cells[8, 5];
 
-            movementLogic.MovePlayer(game.FirstPlayer, cell);
+            game.Move(8, 5);
 
             Assert.AreEqual(GameState.FirstPlayerWin, game.State);
         }

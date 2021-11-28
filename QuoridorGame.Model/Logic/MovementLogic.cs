@@ -1,6 +1,7 @@
 ﻿using QuoridorGame.Model.Entities;
 using QuoridorGame.Model.Exceptions;
 using QuoridorGame.Model.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Game = QuoridorGame.Model.Entities.QuoridorGame;
@@ -32,20 +33,12 @@ namespace QuoridorGame.Model.Logic
                 throw new QuoridorGameException("Currently it's not selected player's turn.");
             }
 
-            if (!GetAvailableMoves(player.CurrentCell).Contains(destination))
+            if (!GetAvailableMoves(player.CurrentCell).Concat(GetAvailableJumps(player.CurrentCell)).Contains(destination))
             {
                 throw new QuoridorGameException("This move is not allowed.");
             }
 
             player.CurrentCell = destination;
-
-            if (IsOnEnemySide(destination))
-            {
-                game.Win(game.CurrentPlayer);
-                return;
-            }
-
-            game.NextTurn();
         }
 
         /// <summary>
@@ -60,26 +53,7 @@ namespace QuoridorGame.Model.Logic
                 throw new QuoridorGameException("Game is not in progress.");
             }
 
-            if (from.AdjacentNodes.Contains(game.OpponentPlayer.CurrentCell))
-            {
-                var enemyCell = game.OpponentPlayer.CurrentCell;
-                var enemySide = GetSide(from, enemyCell);
-                var cellAfterEnemy = GetCellAtSide(enemyCell, enemySide);
-                if (cellAfterEnemy != null)
-                {
-                    return from.AdjacentNodes
-                        .Where(cell => cell != enemyCell)
-                        .Concat(new[] { cellAfterEnemy });
-                }
-
-                return from.AdjacentNodes
-                        .Where(cell => cell != enemyCell)
-                        .Concat(enemyCell.AdjacentNodes.Where(cell => cell != from));
-            }
-            else
-            {
-                return from.AdjacentNodes;
-            }
+            return from.AdjacentNodes.Where(c => c != game.OpponentPlayer.CurrentCell);
         }
 
         private Side GetSide(Cell from, Cell to)
@@ -127,6 +101,34 @@ namespace QuoridorGame.Model.Logic
                 return true;
             }
             return false;
+        }
+
+        public void RollbackPlayerMove(Player player, Cell to)
+        {
+            player.CurrentCell = to;
+        }
+
+        public IEnumerable<Cell> GetAvailableJumps(Cell from)
+        {
+            if (!from.AdjacentNodes.Contains(game.OpponentPlayer.CurrentCell))
+            {
+                return Enumerable.Empty<Cell>();
+            }
+            var enemyCell = game.OpponentPlayer.CurrentCell;
+            var enemySide = GetSide(from, enemyCell);
+            var cellAfterEnemy = GetCellAtSide(enemyCell, enemySide);
+
+            if (cellAfterEnemy != null && enemyCell.AdjacentNodes.Contains(cellAfterEnemy))
+            {
+                return new[] { cellAfterEnemy };
+            }
+
+            return enemyCell.AdjacentNodes.Where(cell => cell != from);
+        }
+
+        public bool IsOnEnemySide(Player player)
+        {
+            return IsOnEnemySide(player.CurrentCell);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using QuoridorGame.Model.Events;
 using System;
+using System.Diagnostics;
 using Game = QuoridorGame.Model.Entities.QuoridorGame;
 
 namespace QuoridorGame.View.Bot
@@ -51,7 +52,8 @@ namespace QuoridorGame.View.Bot
             var y = (char)(e.Y + 'A');
 
             // TODO: decide move or jump
-            var message = $"move {y}{x}";
+            var moveOrJump = e.Jump ? "jump" : "move";
+            var message = $"{moveOrJump} {y}{x}";
 
             Console.WriteLine(message);
         }

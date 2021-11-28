@@ -11,7 +11,7 @@ namespace QuoridorGame.Model.Interfaces
         /// <summary>
         /// Nodes to which we can traverse from current node.
         /// </summary>
-        IEnumerable<T> AdjacentNodes { get; set; }
+        List<T> AdjacentNodes { get; set; }
 
         /// <summary>
         /// Parent node used for path finding.

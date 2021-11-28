@@ -1,4 +1,6 @@
-﻿namespace QuoridorGame.Model.Entities
+﻿using System;
+
+namespace QuoridorGame.Model.Entities
 {
     /// <summary>
     /// Quoridor game field consisting of walkable cells and walls.
