@@ -30,10 +30,9 @@ namespace QuoridorGame.View.Bot.Logic
             int playerPath = playerLengths.Min();
             int enemyPath = enemyLengths.Min();
 
-
-            if (playerPath == 0) // win crutch
+            if (playerPath == 0)
             {
-                return int.MinValue;
+                return double.NegativeInfinity;
             }
 
             return -alpha * Math.Log2(1 + playerPath) +
