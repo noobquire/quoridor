@@ -7,6 +7,7 @@ namespace QuoridorGame.Model.Interfaces
     {
         void MovePlayer(Player player, Cell destination);
         void RollbackPlayerMove(Player player, Cell to);
+        bool IsOnEnemySide(Player player);
         IEnumerable<Cell> GetAvailableMoves(Cell from);
         IEnumerable<Cell> GetAvailableJumps(Cell from);
     }

@@ -1,7 +1,8 @@
 {
   "profiles": {
     "QuoridorGame": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "commandLineArgs": "--gui"
     }
   }
 }

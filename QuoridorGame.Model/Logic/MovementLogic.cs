@@ -39,12 +39,6 @@ namespace QuoridorGame.Model.Logic
             }
 
             player.CurrentCell = destination;
-
-            if (IsOnEnemySide(destination))
-            {
-                game.Win(game.CurrentPlayer);
-                return;
-            }
         }
 
         /// <summary>
@@ -130,6 +124,11 @@ namespace QuoridorGame.Model.Logic
             }
 
             return enemyCell.AdjacentNodes.Where(cell => cell != from);
+        }
+
+        public bool IsOnEnemySide(Player player)
+        {
+            return IsOnEnemySide(player.CurrentCell);
         }
     }
 }

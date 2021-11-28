@@ -122,9 +122,8 @@ namespace QuoridorGame.Model.Tests
         {
             var cell = game.GameField.Cells[7, 4];
             game.FirstPlayer.CurrentCell = cell;
-            cell = game.GameField.Cells[8, 5];
 
-            movementLogic.MovePlayer(game.FirstPlayer, cell);
+            game.Move(8, 5);
 
             Assert.AreEqual(GameState.FirstPlayerWin, game.State);
         }
