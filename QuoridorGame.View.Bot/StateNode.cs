@@ -67,9 +67,18 @@ namespace QuoridorGame.View.Bot
                 {
                     var cell = game.AvailableMoves[i];
                     game.Move(cell.X, cell.Y);
-                    var nextState = new StateNode(game, SEV);
-                    moveScores[i] = sign * nextState.Rollout(NRollouts - 1);
-                    game.PopTurn();
+                    if (game.State == GameState.FirstPlayerWin ||
+                        game.State == GameState.SecondPlayerWin)
+                    {
+                        moveScores[i] = double.NegativeInfinity;
+                        game.PopTurn();
+                        break;
+                    }
+                    else { 
+                        var nextState = new StateNode(game, SEV);
+                        moveScores[i] = sign * nextState.Rollout(NRollouts - 1);
+                        game.PopTurn();
+                    }
                 }
 
                 var wallScores = new double[game.AvailableWalls.Length+1];
@@ -81,6 +90,7 @@ namespace QuoridorGame.View.Bot
                     game.SetWall(wall.Type, wall.X, wall.Y);
                     var nextState = new StateNode(game, SEV);
                     wallScores[i] = sign * nextState.Rollout(NRollouts - 1);
+                    //wallScores[i] = double.PositiveInfinity;
                     game.PopTurn();
                 }
                

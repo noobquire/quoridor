@@ -29,12 +29,7 @@ namespace QuoridorGame.View.Bot.Logic
             }
             int playerPath = playerLengths.Min();
             int enemyPath = enemyLengths.Min();
-
-            if (playerPath == 0)
-            {
-                return double.NegativeInfinity;
-            }
-
+            
             return -alpha * Math.Log2(1 + playerPath) +
                 betta * Math.Log2(1 + enemyPath) +
                 gamma * game.CurrentPlayer.WallsCount;
